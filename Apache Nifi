@@ -1,0 +1,148 @@
+Apache NiFi Basics Notes:
+
+
+SOURCE --------> TRANSFORM ---------> DESTINATION
+
+
+-> What is Data Flow , Data Pipeline and ETL
+
+	-> Data Flow is the moving of data from source to destination 
+		Dat can be json, xml, http data, images, videos, telemetry etc.
+	-> Data pipeline - Movement and Transformation of data from Source to Destination
+	
+	Dataflow vs Data Pipeline -> Transformation which happens along the way in Data Pipeline
+	
+	ETL - also used to refer the movement of data from source to destination
+	
+	ETL vs Data Pipeline -> ETL used to refer the movement of Data in batch fashion ( we read the data from source and process it every 3 - 4 (x) hours)
+							Data pipeline more of a generic term used to refer the movement of data in both batch and stream fashion
+
+
+-> Why should we use a Framework for Data Flow?
+
+	Four V's of data - 
+	
+	Volume - refers to the vast amount of data generated every second
+	Velocity - speed at which data is generated and the speed at which data moves around
+	Variety - different types of data that we can use 
+	Veracity - refers to the messiness or trustworthiness of data
+	
+	Considerations for the solution - 
+	
+	-> support for multiple data format - CSV , JSON plain text etc.
+	-> Support for various types of source and destinations
+	-> Scalable and Reliable for large volume and high velociy data
+	-> Data cleansing and Data validation logics to be considered
+
+
+-> What is apache Nifi?
+
+	Nifi was built to tautomate the flow of data between systems.
+	It can propagate any data content from any source to any destination 
+
+-> Nifi UI
+
+	GetFile - can read a file from a specific location
+	PutFile - to write a file to a specific location 
+
+-> Core Nifi terminologies 
+	-> Flow based programming
+	-> Processor - atomic element in Nifi which can do some specific tasks
+		The source and sink can be anything - SQL, NoSQL, Search Engine, Cache Server, Messaging Queue, AWS entity etc.
+		Custom processors ar also supported
+	
+	->Flow File - Actual Data in nifi propagates in the form of a flowfile
+				Flow file can contain any data CSV, JSON, XML, PlainText, SQL etc.
+			- Abstraction of data in Nifi
+		A processor can generate new FlowFile by processing an existing FlowFile or ingesting new data from any source
+	
+	-> Connections - All processors can be connected to create a dataflow
+		Basically, Processors are linked via connections
+		Each connection will act as a queue for the flowFiles
+		
+	-> Process Group - Set of processors can be combined in Nifi to form a process group
+			help to maintain large and complex data flow
+	
+	-> Input and Output Ports are used to move data between Process Groups
+	
+	-> Controller Services - Shared Service that can be used by a processor
+			- Can hold DB Connection Details 
+	
+
+-> more on FlowFile
+
+		FlowFile - Content
+				 - Attributes
+			
+			-> Content - Actual Data iteslf
+				Actual Content of a file you would read using GetFile, GetHTTP etc.
+				
+			-> Attributes - These are the MetaData from the FlowFile
+				Contains the information about the content
+					-> When it was created, it's name , where it is from 
+					what it represents etc.
+					
+			->	FlowFiles are persisted in the Disk
+				Passed by reference
+				New FlowFile will be created if the content in the existing FlowFile is modified
+				or new data is Ingested from source
+				New FlowFile will not be created if the attributes of the existing flowFile is modified
+				
+-> types of Processors
+
+	->Data ingestion
+	->Data Transformation 
+	->Data Egress/Sending
+	->Routing and Mediation
+	->Database Access
+	->Attribute Extraction
+	->System Interaction
+	->Splitting and Aggregation
+	->HTTP and UDP
+	->AWS
+
+-> Central Philosophy - Configuration over coding
+
+	Processor Configurations, Connections and Relationships in Nifi
+	
+	-> generateFlowFile used to create FlowFile with Random data or Custome Data
+	-> LogAttributes used to log the attributes of the flowfile
+		Can be used as a termination strategy
+	
+	-> relationShip -Each processor has zero or more relationships defined for it 
+		These are named to indicate the result of processing a FlowFile
+		After a processor has finished processing a flowfile, it will transfer the flowfile to one of the Relationships
+		The Flowfile creator needs to handle all the relationship of a processor or terminate unhandled relationship
+		-> Any unhandled relationship in a processor will not let us start that processor
+		
+-> Connection Queue and Back Pressure
+	-> each connection can have its back Pressure Defined - Nifi Stops if any of the below thresholds is reached
+		Object threshold - Limits the number of files the connection can hold 
+		Size Threshold - Limits the Size of file in the Queue
+	
+-> Working with Attibutes and Content in NIFI
+
+-> Working with Expression Language in NIFI
+
+-> Funnel In Nifi
+	-> Combine data from several connections into a single Connection 
+	
+	Question ? 
+	Input and Output ports are there to transfer data between different Process Groups
+	Can't we use them to combine data from several connections into a single connection
+	
+	--> If we use ports for combining data from different sources we will need to create a different process group for each source of data
+		Funnel solves that issue and combines that data inplace
+		
+-> Monitoring Nifi
+
+-> Nifi Registry
+		-> Complimentary project that provides a central location for storing and managing shared resources across one or more Nifi nstances 
+		-> separate sub project of Apache Nifi
+		
+		
+		Why nifi Registry - 
+		
+			We have to manually download the template and commit out changes to ay version control tools like GIT or SVN
+			Merge is going to be a nightmare
+			More complexity is involved when we need to take the latest version of the template from the repository and merge it with our uncommitted version.
