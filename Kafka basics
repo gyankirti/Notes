@@ -1,0 +1,307 @@
+Kafka Basics
+
+Apache kafka is a distributed streaming platform
+
+-> to create one or more realtime streams of data 
+-> can be used to process these streams
+
+It is a highly scalable and distributed platform for creating and processing streams in real-time
+
+How does it work?
+
+	It uses enterprise messaging system - pub - sub messaging system
+	
+	
+	publisher(data producer)
+		|
+	Message broker(kafka server)
+		|
+	subscriber(user)
+	
+ Kafka brings data to various members of the infra.
+	  Producers and consumers are completely decoupled and they do not need tight coupling
+	  
+	
+Producer - it is an application which sends data(message)
+
+Consumer - Recipients of data which get data from the consumer
+
+Broker - Kafka Server
+
+Cluster - Group of computers each running one instance of the kafka broker
+
+Topic - Name given to a data stream - Producres and consumers are going to recieve the data by topics
+	  - Can be referred as a table - producers can push data into the table and consumers can read data from the table
+	  
+Topic Partition - The broker is going to face a storage capacity challenge
+	One solution is to break the topic into multiple parts and distribute it over multiple computers in the kafka cluster
+
+How to know the number of partitions in a topic - responsibility of a dev
+
+partition offset - unique sequence_id of a message in the partition 
+	Assigned by the broker to every message record as it arrives in the partition
+	These id's are not going to change, these are immutable
+	Sequencing means kafka stores the messages in the order of arrival
+	These offsets are local in a partition
+TO LOCATE A MESSAGE - we need 
+	TOPIC NAME -> PARTITION NUMBER -> OFFSET NUMBER
+		
+Consumer Group - Multiple consumers can form a group to share the workload
+
+KAFKA CONNECT - component of kafka for moving data between kafka and external systems
+	Source Connectors
+	Sink Connectors
+
+	How it works
+		Kafka Connect Source Framework (JDBC SOurce Connector)
+		Kafka Connect Sink Framework (Snowflake Connector)
+Connect Transformations
+	Allows some fundamental single message tranformations
+		You can apply some tranformations or changes to each message on the fly
+		Allowed with both source and sink connectors
+		
+	Worker 
+	Connector 
+	Task
+	
+	
+
+		
+KAFKA Streams - 
+	What is real time stream processing 
+	
+		Data streams are 
+		unbounded , infinite and growing sequence of data being generated constantly
+		in sequence of data in small packets(KB)
+		
+		We have a challenge to process them - 
+		
+		One common approach is to collect and store them in a storage system. Then you can do two things - query the data to get answers to a specific question. 
+		This is what we know as a request response approach and usually handle through skills. 
+		This approach is all about asking one question at a time and getting the answer to the question as quickly as possible. 
+		The second approach is to create one big job to find answers to a bunch of queries and schedule the job to run at regular intervals. 
+		This approach is all about asking a bunch of questions at once and repeating the question every hour or maybe every day. 
+		And this approach is known as batch processing. 
+		The stream processing sits in between these two approaches. In this approach we ask a question once and the system should give you the most recent version of the answer all the time. 
+		So, stream processing is a continuous process and the business reports are updated continuously based on the data available till day time. 
+		As we receive more data, the reports are updated and refreshed with the new information. However, under the hood, you might be doing the same usual operations as joining two streams, grouping your data, computing aggregates and other ordinary things that we do in database queries and batch processing systems. 
+		After all, stream processing is also a data processing work, But we do it in a continuous and ongoing process. Now the question is this, can we use databases or batch processing systems to perform stream processing? The answer is yes and no. 
+		Technically it is possible to use databases and batch systems to do the stream processing. So, the answer is yes. However, dealing with data in real time, using those systems is going to make your solution too complex. 
+		Also, there are some new concepts and considerations which are going to make your work more difficult. So, we need a tool that is specifically designed for stream processing and Kafka streams is exactly what you might be looking for. You might be wondering about this question, can we do it using Kafka producers, consumers and Kafka connect or are we going to need Kafka streams? 
+		So, the point is this real time stream processing is not as straightforward as data integration. It poses some new challenges and you cannot solve those problems using tools that were designed to address the data integration problem, I mean Kafka producer, consumer and Kafka connect. 
+		They are not an answer for stream processing. You need a new tool that is designed and developed to meet your stream processing requirements and that's what Kafka Streams is all about. Now, the next question, 
+		
+		what is Kafka Streams and how it solves stream processing challenges?  
+		At the most basic level Kafka Streams is a library for building applications and microservices where the input data are streamed in a Kafka topic, 
+		so you cannot use Kafka streams if your data is not coming to Kafka topic. The starting point for the Kafka stream is one or more Kafka topics, right? 
+		Now, the most powerful feature of Kafka streams is being a simple library. 
+		So, you can create a standard Java and SQL applications to perform real time stream processing and you can deploy your applications to any machine, virtual machine, container or on Kubernetes cluster. 
+		Your application is just another typical application with inherent parallel processing capability, fault tolerance and scalability, which is given to you by the Kafka streams library as an out of the box capability. 
+		Other than this Kafka streams library is specifically designed for the sole purpose of stream processing. 
+		
+		So, it allows you to handle all those unique streaming challenges. 
+		
+		
+		Here is a list of the most critical capabilities: 
+		working with streams, tables and inter operating with them. I mean you can mix and match your solutions with streams and tables and you can even convert a stream to a table and vice versa. 
+		It allows you to group your streams and compute continuously updating aggregates. 
+		You can join streams, tables and a combination of both. 
+		You can create and manage fault tolerant, efficient local state stores. 
+		Creating windows of different types and dealing with all the time domain complexities such as event time, processing time, latecomers, high watermark, exactly-once processing, etc. 
+		It also allows you to serve other microservices using request response interface over and above your streams application. This feature is also known as Kafka streams Iteractive Query. It gives you a set of tools for unit testing your application. 
+		The library gives you an easy to use DLS and also offers flexibility to extend and create your custom processors beyond what is provided. 
+		You can get an inherent fault tolerance and dynamic scalability. 
+		You can deploy your stream processing applications in containers and manage them in the Kubernetes cluster. 
+		And this list is not exhaustive. Now, the concluding question how it works? Kafka Streams Architecture.  
+		
+		So, the Kafka Streams is all about continuously reading a stream of data from one or more Kafka topics and then you develop your application logic to process those streams in real time and take necessary actions. 
+		So, assume that you created a Kafka streams application and deployed it on a single machine. Right? Your application will be running here. 
+		Now, imagine that your Kafka streams application is continuously consuming data from two topics, T1 and T2 with each having three partitions. 
+		I'm not going into the functionality of your application, it might be monitoring traffic data or maybe patient vitals continuously checking some thresholds and sending alerts when the threshold breaks. Right? 
+		We are trying to understand the scalability and fault tolerance of your simple and tiny application so you deploy your application on a single machine. 
+		Now, the Kafka Streams will internally create three logical tasks because the maximum number of partitions across the input topics T1 and T2, are three. 
+		So, the Kafka streams framework knows that we can create three consumers where each could be consuming from one partition in parallel. 
+		The most exciting parties you don't have to code this thing. The framework smartly detects it and creates three logical tasks. The next step is to assign partitions to these tasks. In this case, the Kafka framework would allocate the partitions evenly, That is one partition from each topic to each task.
+		At the end of this assignment, every task will have two partitions to process. Now these tasks are ready to be assigned to application threads or instances. 
+		If you configure the application to run with two threads, Kafka would assign one task to each thread and the remaining third task will go to one of these threads because we do not have any other thread. 
+		In this case, the task distribution is not even, the thread running two task might run slow. However, all tasks would be running and ultimately all the data gets processed. You might be wondering why I said to configure the application to run with two threads. Yes, you heard it right. You can make your Kafka streams become a multi threaded applications by simply setting the number of max threads. 
+		It is that simple. So, as of now you have one application instance running on a single machine and sharing the workload into parallel threads. Now, imagine we want to scale out this application, we decided to start another instance with a single threat on a different machine. A new thread T3 will be created and one task would automatically migrate to the new thread. 
+		This happens automatically and known as task reassignment. When the task reassignment occurs, task partitions and their corresponding local status stores will also migrate from the existing thread to the newly added thread. 
+		As a result, Kafka streams has effectively rebalanced the workload among instances of the application at the granularity of Kafka topic partitions. All this happens automatically and without stopping or restarting your application. 
+		What if we wanted to add even more instances of the same application? Well, you can do that, but they will be doing nothing. Why? Because we have only three tasks, which is equal to the number of available input partitions to read from adding more instances beyond that point is an over provisioning with idle instances.
+		
+		What about fault tolerance? What happens if an active instance dies or goes down? Kafka streams is out of the box fault tolerant. If a task runs on a machine that fails, Kafka streams automatically restarts the task in one of the remaining running instances. As a result, failure handling is entirely transparent to the end user and it is taken care of by the framework itself.
+
+
+
+KSQL - 
+	SQL interface to kafka streams
+	- Interactive Mode - ideal for dev env
+	- Headless Mode - ideal for prod env
+	
+	Architecture - 
+		KSQL engine
+		REST Interface
+		KSQL Clint(CLI/UI)
+		
+		
+		KSQL Engine and the REST interface together form the KSQL Server
+		The server can be deployed in one of the interactive modes or headless modes
+		
+		Multiple KSQL servers can be deployed to form a ksql cluster
+		
+
+
+
+When to Use What?
+	
+What is apache zookeeper ?
+Kind of a db, where kafka brokers would store a bunch of shared information where kafka brokers would share a bunch of shared information
+and it is used as a shared system among multiple kafka brokers to coordinate among themselves
+for various things
+
+You should have it running even for a single node
+
+
+Using producer and consumer - 
+	-> Sending data file to kafka
+		- Create topic using kafka-topics
+		- Sending data file using kafka-console-producer
+	-> Reading kafka Topic
+		- Using kafka-console-consumer
+		
+		
+
+--Command to create a single node kafka cluster
+		
+	.\bin\windows\kafka-topics.bat --create --topic test --partitions 1 --replication-factor 1 --bootstrap-server localhost:9092
+	
+	
+--Multi Node Kafka Cluster
+
+
+Kafka Responsibilities
+
+-> Recieve messages from the producers and acknowledge the successfull reciept
+-> Stor the messages in a log file to safeguard it from potential loss
+-> Deliver the messages to the consumers when they reu=quest it
+
+
+Kafka Storage Architecture 
+Kafka Cluster Architecture
+Work Distribution Architecture
+
+
+Apache kafka is a messaging broker
+
+Replication factor
+
+
+
+Zookeeper is the database of the kafka cluster control information
+
+
+
+Partition Allocation and Fault Tolerance
+
+Kafka topics are broken into independent partitions, each partition is self contained
+
+All the info about the partition like segment files and indexes are stored inside the same directoery
+
+How are the partitions allocated to brokers?
+	- Even distribution 
+	- Fault Tolerance
+		We can chiee this just by placing copies of different machines
+		
+			---- Goals
+	- To distribute 
+		-> make an ordered list of brokers 
+		-> leaders and followers ssignment
+		
+	
+Leader Vs Follower
+
+	Broker manager leader as well as the follower partitions
+	
+	For the Broker being a leader means - Handling all the requests from the producers and consumers
+		i.e. the producers and the consumers interact with the leader
+		
+ISR List - 
+
+	Persisted in the zooeeper
+		Leader has the job of handling the insync replicas
+		All the followers in this list are known to be insync with the leader and they are an excellent candidate to be elected as the new leader
+		when something fails
+		
+	How do a leader would if the follower is in sync
+	
+	
+	A message is committed when it is safely copied at all the 
+	replicas in the ISR
+	
+
+The minimum in Sync replicas
+	
+	
+Hands On	
+	
+You can create a Producer by setting some essential configurations and it start sending messages using the send method. 
+There is only one restriction that you must package your message in a Producer Record Object. While the send method is straightforward, a lot of things happen behind the scenes.
+We package the message content in the Producer Record Object with at least two mandatory arguments. Kafka topic name and message value. Kafka topic name is the destination address of the message. 
+The message value is the main content of the message, right? Other than these two mandatory arguments, you can also specify the following optional items; message key, target partition, message timestamp. The message key is one of the most critical argument. 
+And it is used for many purposes, such as partitioning, grouping, and joints. You will learn more about the usage of a key as you progress with the course. However, at this stage, consider it as another mandatory argument. Even if the API doesn't mandate it. 
+Target partition and the timestamp are purely optional. And you may want to set these arguments rarely. I'll talk about these arguments in a minute. The Producer record wraps your message content with all necessary information, such as topic name, key, and timestamp. 
+Once created, you can hand over the Producer record to the Kafka Producer using the send method.
+
+
+
+Without serialising the data,we canbot send it to a remote location
+Kafka Doesn't know how to serialise your key and value
+That's why, specifying a key serialiser and a value srialiser is must
+We supply these as a part of the producer serialisation
+
+
+Producer Partitioner
+
+
+Scaling up the producers
+	Apache Kafka was designed with the scalability in mind and scaling a Kafka application is straightforward. If you consider the POS example, then each POS system can create a Kafka producer object and send the invoices. The figure here shows the scenario where multiple POS systems can send invoices in parallel. 
+	At the cluster end, it is the Kafka broker that receives the messages and acknowledges the successful receipt of the message. So, if you have hundreds of producers sending messages in parallel, you may want to increase the number of brokers in your Kafka cluster. A single Kafka broker can handle hundreds of messages or maybe thousands of messages per second. 
+	However, you can increase the number of Kafka brokers in your cluster and support hundreds of thousands of messages to be received and acknowledged. On the producer side, you can keep adding the new producers to send the messages to the Kafka server in parallel. This arrangement provides linear scalability by merely adding 
+	more producers and brokers. This approach works perfectly for scaling up your overall streaming bandwidth. However, you also have an opportunity to scale an individual producer using multithreading technique. A single producer thread is good enough to support the use cases where the data is being produced at a reasonable pace. 
+	However, some scenarios may require parallelism at the individual producer level as well. You can handle such requirements using multithreaded Kafka producer. The multithreading scenario may not apply to the applications that do not frequently generate new messages. For example, an individual POS application would be producing an Invoice every 2, 3 minutes. 
+	In that case, a single thread is more than enough to send the invoices to the Kafka cluster. However, if you have an application that generates or receives data at high speed and wants to send it as quickly as possible, you may want to implement a multithreaded application.
+	
+	
+	
+	Let's assume aa stock market data provider application, as shown in the figure. The application receives, tick-by-tick, astock data packets from the stock exchange, over a TCP/IP socket. The data packets are arriving at high frequency, so you decided to create a multi-threaded data handler. The main thread listens to the socket 
+	and reads the data packet as they arrive, but immediately hands over the data packet to a different thread for sending the data to the Kafka broker. And the Main Thread, again, starts reading the next data packet. The other threads of the application are responsible for uncompressing the packet, reading individual messages from the data packet, 
+	validating the message, and sending it further to the Kafka broker. Similar scenarios are common in many other applications where the data arrives at high speed and you may need multiple application threads to handle the load. Kafka Producer is threadsafe, so your application can share the same producer object across multiple threads and send messages in parallel using 
+	the same producer instance. It is not recommended to create numerous producer objects within the same application instance. Sharing the same producer across the threads will be faster and less resource intensive.
+	
+	
+	
+	At least once vs at most once
+	
+	However, some specific and intricate scenarios require some extra attention. In this lecture, I'll talk about some advanced producer concepts. Let us start. . 
+	Apache Kafka provides message durability guarantee by committing the messages at the partition log. The durability simply means, once the data is persisted by the leader broker in the leader partition, we cannot lose that message till the leader is alive. 
+	However, if the leader broker goes down, we may lose the data. To protect the loss of records due to leader failure, Kafka implements replication, right? And Kafka implements replication using followers. 
+	The followers will copy messages from the leader and provide fault tolerance in case of leader failure. In other words, when the data is persisted to the leader, as well as to the followers in the ISR list, we consider the message to be fully committed. 
+	Once the message is fully committed, we cannot lose the record until the leader and all the replicas are lost. Which is an unlikely case. However, in all this, we still have a possibility of committing duplicate messages due to the producer retry mechanism. As we learned in the earlier section, 
+	if the producer I/O threads fails to get a success acknowledgement from the broker, it will retry to send the same message. Now assume that the I/O thread transmits a record to the broker. The broker receives the data and it stores it into the partition log.
+	The broker then sends an acknowledgement for the success and the response does not reach back to the I/O thread due to a network error. In that case the producer I/O thread will wait for the acknowledgement and ultimately send the record again, assuming a failure. 
+	The broker again receives the data, but it doesn't have a mechanism to identify that the message is a duplicate of an earlier message. Hence, the broker saves the duplicated record, causing a duplication problem. This implementation is known as At Least Once Semantics, where we cannot lose messages because we are retrying until we get a success acknowledgement. 
+	However, we may have duplicates because we do not have a method to identify your duplicate message. For that reason, Kafka is said to provide At Least Once Semantics. Kafka also allows you to implement At Most Once Semantics. How? Well that's easy. You can achieve at most once by configuring the retries to zero. In that case, you may lose some records, but you will never have a duplicate record committed to Kafka logs.
+	
+	
+	Exactly once
+	
+	To meet Exactly Once requirement, Kafka offers an idempotent producer configuration. All you need to do is to enable idempotence and Kafka takes care of implementing Exactly Once. To enable idempotence, you should set the enable.idempotence producer configuration to true. Once you configure the idempotence, the behavior of producer API is changed. There are many things that happen internally, but at a high level, 
+	the producer API will do two things. It will perform an initial handshake with the leader broker and ask for a unique producer ID. At the broker side, the broker dynamically assigns a unique ID to each producer. The next thing that happens is the message sequencing. The producer API will start assigning a sequence number to each message. This sequence number starts from zero and monotonically increments per partition. 
+	Now when the I/O thread sends a message to the leader, the message is uniquely identified by the producer ID and the sequence number. Now the broker knows that the last committed message sequence number is x and the next expected message sequence number is x+1. This allows the broker to identify duplicates as well as missing sequence numbers. So, setting enable.idempotence to true will help you to ensure that the 
+	messages are neither lost nor duplicated. How exactly it happens is not much relevant. We'll leave that on producer API and broker. All you need to do is to set the configuration to activate this behavior. However, you must always remember one thing. If you are sending duplicate messages at your application level, this configuration cannot protect you from duplicates. That should be considered as a bug in your application. 
+	Even if two different threads or two producer instances are sending duplicates, that too is an application design problem. The idempotence is only guaranteed for the producer retrace, and you should not try to resend the message at the application level. Idempotence is not guaranteed for the application level message resends or duplicates sent by the application itself.
+	
+	
+	Types and Serialization
+	
