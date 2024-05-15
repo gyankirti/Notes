@@ -1,0 +1,616 @@
+JAVA
+
+Jdk is needed in order to develop the code 
+Jre is required to just execute the java program - provides env and tools to execute the java program
+
+IDE Eclipse
+
+JVM - Java Virtual Machine provides an env. to run java applications. JVM interprets the byte code into machine code which is executed in the machine in which the java programs run
+
+JRE - Java Runtime Environment contains libraries and software needed by your Java programs to run, JREE combines java code with the required libraries as an when required to startJVM to execute the java code
+
+JDK - Java Development Kit is a softwaredevelopment env. used to develop java applications.
+It contains JRE , interpreter/loader , a java compiler(javac), an archiver (jar), a documentation generator (javadoc) accompanied by many other tools
+Java supports compiler as well as interpreter
+
+JRE+other componenets = JDK
+
+														verification using byte code verifier													
+Source Code ----> Byte Code (understood by JVM) ---> JVM										-----> Native Code ---> Native Code Executed Step by step using the JVM interpreter
+			Javac								CL - Class loader								JRT Compiler
+	
+JVM Internal
+	-> Class Loader + Byte Code Verifier
+	
+		Execution Engine - JVM Interpreter 
+							JIT Compiler
+							Thread Manager
+							Memory Manager
+							Garbage Collector - de allocating the used memory
+
+Data Area 
+-> stack 
+-> heap
+-> method
+-> Register - calculations
+	
+Objects stored on the heap area
+Primitive variables stored on the stack area
+
+
+class First{
+	public static void main(String[] args){
+		System.out.println("Hello!");
+	}
+}
+
+in cmd -> to compile the code 
+	--> javac <filename>
+	output of the javac command is a byte code
+	it creates a file with an extension of .class
+	
+	--> we need to tell the JVM to load the class 
+	
+	--> java First (in cmd)
+	
+Only one class can be declared as a public class
+
+
+	LocalDate.now() -- gives the current date of the system
+	
+	
+	
+	
+package java demos;
+
+class NumberCheck {
+
+int displayBigNumber(int numl, int num2, int num3) {
+
+int biggestNumber;
+
+if (num1 > num2) {
+
+if (num1 > num3) {
+
+biggestNumber = numi;
+
+biggestNumber num3;
+
+} } else {
+
+if (num2 num3) {
+
+biggestNumber = num2;
+
+} else {
+
+biggestNumber num3;
+
+}
+
+}
+
+return biggestNumber;
+
+public class MainProgram {
+
+public static void main(String[] args) {
+
+System.out.println(new NumberCheck().displayBigNumber(11, 18, 7));
+
+
+
+
+Conversions ( from higher datatype to lower datatype and vice versa)
+
+Widening - Lower to higher
+
+Narrowing - Higher to lower - these lose information about the overall magnitude of a numeric value
+
+	This should be explicit using typecasting
+	
+	Boolean can't be casted to any typecasting
+	Boolean can't be treated as an integer like in other languages
+	
+Wrapper classes
+
+
+
+Objects 
+
+State - state of an object
+
+Behaviour - it changes the state of the object
+
+
+Netbanking
+transfer amnt
+check balance
+check accnt status
+
+Object : Account
+states : balance, status
+Methods : checkStatus(), transfer(), chackBalance()
+
+Abstraction: 
+
+to achieve abstraction 
+we use classes
+
+
+Class : 
+	- Blueprint of an object ==> create many objects
+	- It defines which type of object to be created. It is a logical entity which is instanced once an object is created.
+		class contains fields, methods, constructor, interfaces, nested classes
+	
+
+When we create a class,
+ - object states are called instance variables
+ - object behaviours are called as methods
+
+
+
+-------------------------------------------------Example----------------------------------------------------------------------------------------------
+
+
+
+package Javademo;
+
+public class Account{
+	int accountNumber;
+	String name;
+	double balance;
+	
+	// Behavior == methods
+	// 3 types of methods 
+	//  - Constructors
+	//	- Getters an Setters
+	//	- Business Methods
+	
+	
+	
+	//1. constructor - responsible to initialize the fields which are mandatory and which are read only
+	// 					name of this method is same as the name of the class
+	// 					does not return anything
+	// Functionally this should be called at the time of account creation
+	//   i.e. Account a1 = new Account(101,"Gyan");
+	//		  Account a2 = new Account(); - default constructors - doesn't have any parameter
+	// if we have 0 constructors, then java implicitly provides a default constructor
+	
+	
+	// default Constructor
+	Account(){
+		
+	}
+	// Parameterized constructor
+	Account(int accNo, String ownerName){
+		this.accountNumber = accNo;
+		this.name = ownerName;
+	}
+	
+	// getter
+	// setter
+	// to read and write the property of the fields
+	// setters should be present for only those values whose values change
+	// in short value is already set inside the constructor, so no need to set the value again
+	
+	
+	//
+	void setBalance(double balance) {
+		this.balance = balance;
+	}
+	
+	String getName() {
+		return name;
+	}
+	double getBalance() {
+		return balance;
+	}
+	
+	// 3. business methods
+	double deposit(double amount) {
+		this.balance+=amount;
+		return this.balance;
+	}
+	double withdraw(double amount) {
+		if(this.balance>=amount) {
+			this.balance -= amount;
+		}
+		
+		return this.balance;
+	}
+}
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Encapsulation - we hide the internal state of an object and requiring all the interactions to bve performed using object methods
+	- we hide the data, and all the inetraction to be done with the methods of the object
+	
+	- we can enable the data encapsulation using access specifiers 
+		public and private 
+		- Public means the method is applicable to anyone
+		- Private means 
+		
+	- State should be private and methods should be public 
+	
+Abstraction - Focus on important properties and ignore irrelevant information
+
+
+Inheritence - One calss can inherit state and behavior from other
+			
+	- To do some alteration / modification
+	- Reusability
+	- Extension
+	
+Ovrriding - we do do alteration / modification using this methods
+
+Polymorphism - An object can have many forms in different context
+
+	- Method Overloading - static poly
+	- Method Overriding - dynamic poly 
+	
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+//using object specifiers
+
+
+
+package Javademo;
+
+public class Account{
+	private int accountNumber;
+	private String name;
+	private double balance;
+	
+	// Behavior == methods
+	// 3 types of methods 
+	//  - Constructors
+	//	- Getters an Setters
+	//	- Business Methods
+	
+	
+	
+	//1. constructor - responsible to initialize the fields which are mandatory and which are read only
+	// 					name of this method is same as the name of the class
+	// 					does not return anything
+	// Functionally this should be called at the time of account creation
+	//   i.e. Account a1 = new Account(101,"Gyan");
+	//		  Account a2 = new Account(); - default constructors - doesn't have any parameter
+	// if we have 0 constructors, then java implicitly provides a default constructor
+	
+	
+	// default Constructor
+	Account(){
+		
+	}
+	// Parameterized constructor
+	Account(int accNo, String ownerName){
+		this.accountNumber = accNo;
+		this.name = ownerName;
+	}
+	
+	// getter
+	// setter
+	// to read and write the property of the fields
+	// setters should be present for only those values whose values change
+	// in short value is already set inside the constructor, so no need to set the value again
+	
+	
+	//
+	/* void setBalance(double balance) {
+		this.balance = balance;
+	}
+	*/
+	public int getAccountNumber() {
+		return accountNumber;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	public double getBalance() {
+		return balance;
+	}
+	
+	// 3. business methods
+	public double deposit(double amount) {
+		this.balance+=amount;
+		return this.balance;
+	}
+	public double withdraw(double amount) {
+		if(this.balance>=amount) {
+			this.balance -= amount;
+		}
+		
+		return this.balance;
+	}
+}
+
+
+
+package Javademo;
+
+public class Client {
+	public static void main(String[] args) {
+		Account account = new Account(100, "Gyan");
+		System.out.println(account.getAccountNumber());
+		System.out.println(account.getName());
+		System.out.println(account.getBalance());
+		account.deposit(4000);
+		System.out.println(account.getBalance());
+	}
+}
+
+-------------------------------------------------------------------------------------------------------------
+Encapsulation - Data Hiding
+- process of wrapping the code and data together as a single unit known as data model class or 
+
+
+
+Advantages of OOPS - 
+-> Modularity
+-> Information-hiding
+-> Code re-use
+-> Plug ability and debugging ease
+
+
+Access Scopes
+ - used to implement encapsulation
+ 
+ 1. At the class level - public or default 
+ 2. At the member level - public, private , protected, default (no explicit modifier)
+ 
+ 
+ 
+ Modifier 	Class	Package		Subclass 	World
+ 
+ public		  Y		   Y			Y		  Y
+ protected	  Y        Y            Y         N
+ no modifier  Y        Y            N         N
+ private	  Y        N            N         N
+ 
+ 
+ Class Modifier - Abstract or Final
+ Variable Modifier - final,static,transient,volatile
+ 
+ 
+ 
+ Variables - 
+	Instance - life of this variable is until the object is not destroyed
+		per instance of the class object
+		initialized as soon as the object is ready
+		can have access modifiers like public, private and protected
+	
+	Static or Class variables - life until the class is not unloaded from the jvm
+		declared using static modifier
+		initialized when class is loaded into the JVM memory and will have the same value for all instance
+	
+	Local - inside a method - life of this local variable is until this is inside a method
+		local in scope and not visible outside of the declared block
+		Final Local variables are visible from inside of anonymous inner class
+
+
+Static member
+	- Class member variable
+	- Class member method
+	- Block
+
+	Static mmber can be called directly using the class name, it doesn't need an instance to be created
+	Local variable cannot be static
+	If you want to have variables that are common for all objects we need to use static modifier
+	
+	Static modifier, in combination with the final modifier, is also used to define constants
+		public static final double PI 3.14159265;
+		-- Final variable value can not be re initialized
+	
+	Static variables are accessible throught the static methods
+	
+	Static Methods 
+		Can access class variables and class methods directly
+		Cannot access instance variables or instance methods directly - they must use an object reference
+		cannot use this keyword as "this" keyword refers to the current class - "this" is for the current instance and it can't be used for the 
+	
+	
+	Aggregation 
+		Special Form of association
+		relationship between 2 classes
+		One way relationship
+		Has - A relationship
+		
+		-- We define the instance of a class inside the parent class
+		
+		
+Constructor 
+
+	Constructors called using the new keyword
+	Cannot have any return tyoe and also it cannot be static, abstract, final or synchronized
+	Access modifiers like public, private, protected  and default can be used while declaring  constructor
+	
+	There are
+		Default Constructors
+		Parameterized Constructors
+	Overloading can be done by providing different type of variables to the constructors
+	
+	this keyword - used to remove the ambiguity between the local and instance variables
+	- helps us to identify the instance variables
+	- can be used for chaining the constructors by using the overloading and passing the parameters and calling the constructors
+	
+	
+	Overloading
+		No of Parameters
+		Types of Parmeters
+		Order of Parameters
+		Should be Different
+------------------------------------Constructor Overloading----------------------------------------------------------------------------------------------------
+	
+	
+	package Javademo;
+
+public class point2D {
+	private int xCord;
+	private int yCord;
+	//Default Constructor
+	public point2D() {
+		this.xCord = 0;
+		this.yCord = 0;
+	}
+	//Parameterized Constructor
+	public point2D(int value) {
+		this.xCord = value;
+		this.yCord = value;
+	}
+	//Parameterized Constructor
+	public point2D(int xVal, int yVal) {
+		this.xCord = xVal;
+		this.yCord = yVal;
+	}
+	
+	
+	// We performed Overloading of Constructors
+}
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+Inheritence
+	Superclass - Class which is extended
+	SubClass - Class which extends the superclass
+- IS A relationship
+
+- extends keyword is used 
+	provides Runtime polymorphism and method overriding
+	
+- In absence of any other superclass, every class is an implici subclass 
+of java.lang.object
+			|
+	public class Account{}
+			|
+	public class Residential extends Account{}
+			|
+	public class Business ectends Account{}
+	
+Multiple inheritence is not supported in Java
+
+
+super.val - helps us to access any value present in the superclass
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Conversion of Reference types
+
+Super() links the constructor from the child to the parent constructor
+
+
+
+Runtime Polymorphism
+
+package Javademo;
+
+class Animal{
+	void whoAmI() {
+		System.out.println("I am a generic animal");
+	}
+}
+class Dog extends Animal{
+	void whoAmI() {
+		System.out.println("I am a Dog");
+	};
+}
+class Cow extends Animal{
+	void whoAmI() {
+		System.out.println("I am a Cow");
+	};
+}
+class Snake extends Animal{
+	void whoAmI() {
+		System.out.println("I am a Snake");
+	};
+}
+public class dynamicPoly {
+	public static void main(String[] args) {
+		Animal [] animals = {new Cow(),new Snake(), new Dog(),new Animal()};
+		for(Animal animal:animals) {
+			animal.whoAmI();
+		}
+	}
+}
+
+
+O/P
+
+I am a Cow
+I am a Snake
+I am a Dog
+I am a generic animal
+
+Method Overriding
+
+An instance method in a subclass with the same signatur as an instance ethod in the super class is called method overriding
+	-> method name must be same
+	-> Parameters (type, number and order) must be the same
+	-> Return type is either same or subtype. - known as covariant return type
+	-> Access modifier either same or higher access modifier
+
+@Override - this annotation is a signal to the compiler to check if the signature of the overriden funcation mathches the signature 
+of the function in the parent
+
+
+
+Variable Arguments (Varargs)
+
+Var - args allows the method to accept zero or multiple arguments
+
+
+final modifier - 
+
+	- we can use the keyword final in a method declaration to indicate that the method can't be overriden by subclasses
+	- we can declare some or all of the methods of the class as final
+	- java.lang.object class does this - a number of it methods are final
+	- we can also declare an entire class as final
+	- this prevents the class from being subclasses
+	- this is particularly useful for creating an immutable class like the string class
+
+we can apply final keyword on 
+
+
+	1. variables (instance/local) - constant
+	2. methods - can't be overriden
+	3. classes - can't be inherited
+
+
+
+Abstract Class and Interface
+
+
+
+// concrete methtod
+public void add(){
+	int x = a+b;
+}
+
+//abstract method
+public abstract void add()
+
+
+
+Abstract Class
+	if a class contains even a single abstract method, it has to defined as an abstract class
+	instance can't be created for an abstract class
+
+	Sit 1: If we have a abstract class a with an abstract method in it
+	then a class b is extending the class a , then we need to provide a body for the abstract method of the parent class
+	else if you dont want to provide the body then b should be made abstract
+	
+	Abstract methods should always be overrided
+	
+	
+	-- Rules in a nutshell
+	
+	-> Abstract class can be subclassed
+	-> Abstract class instance can't be created
+	-> A subclass extending an abstract class should provide the body for the abstract methods 
+	-> if its not providing the body, then it should be declared as an abstract method
