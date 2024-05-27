@@ -614,3 +614,127 @@ Abstract Class
 	-> Abstract class instance can't be created
 	-> A subclass extending an abstract class should provide the body for the abstract methods 
 	-> if its not providing the body, then it should be declared as an abstract method
+	-> Abstract methods should always be overriden
+	
+Realtime Example fo abstract Class
+
+	Passport head office(Delhi) ==> Abstract Class
+		1. verification			==> abstract
+		2. approval				==> concrete
+	
+	Local passport Offices		==> Subclass
+		- Mumbai (Aadhar)
+		- Chennai (PAN)
+	
+	
+	If any restriction is to be set for the child classes and methods 
+	then we will need abstract classes
+	- Dictate strict protocol/rule to the subclass
+	- subclasses have their own way of implementation
+	
+	
+
+Interfaces
+-- Common protocol for all types of subclasses
+
+If a class consists of all methods which are abstract, then this class can be declared as an interface
+
+Is a contract to the client to know all the behaviors the object has(except how they are being implemented)
+
+
+	Interfaces cannot be instantiated - they can only be implemented by classes or extended by other interfaces
+	When an instantiable class implements an interface, it provides the method body for each of the methods declared in the interface
+	
+	If a class does not implement all the methods of an interface, that class should be declared as abstract.
+	
+	All the variables declared inside an interface are declared as constants 
+	
+	
+	static variables can be accessed without the creating any object
+	-> A class can extend one class and implement any number of interfaces at the same time
+	-> A class can extend one class and implement any number of interfaces at the same time
+	-> A class can implement multiple interfaces
+	
+	i.e. public class Car extends motorizedVehicle implements iVehicle {
+	
+	Abstract Class vS Interface
+	
+	-> If the classes which exted the base class have common methods, fields or have access modifiers like protected or private
+	-> where classes can modify the state of the object to which they belong by having non static no final fields in the base class
+	
+	Interface
+	
+	-> When we want to have industry standard API' having complex methid signatures but implementation differ from product to product or company to company
+	-> When we want to take advantage of multiple inheritence
+	-> When implementing class is unrelated and is not tightly coupled to have implementation part mandatory
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	---------------------------------------------------------------------------------------
+	
+	Exception Handling
+	
+	
+	
+	Steps after exception is occured??
+
+1. JVM collect all info about exception
+
+1. method name 2. line number
+
+3. class name
+
+4. issue details
+
+5. time and date of exception
+
+2. JVM stores all info in an object (exception object) 3. Exception object will be passed to your method. (throw)
+
+4. Your method can handle the exception or pass it to higher method 5. Your higher method will handle exception or pass it to JVM
+
+6. If exception reaches to JVM then JVM will abnormally terminate your program.
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+Scanner scanner = new Scanner(System.in);
+String name = scanner.nextLine(); -- Method which excepts a string
+					nextLine accepts nothing also - space
+System.out.println();
+
+
+scnner.next() doesn't accept space as an input
+scanner.nextInt();
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Inner Classes
+
+
+Anonymous Inner Class - Java anonymous inner class is an inner class without a name and for which only a single object is created. 
+An anonymous inner class can be useful when making an instance of an object with certain "extras" such as overloading methods of a class 
+or interface, without having to actually subclass a class.
+
+In simple words, a class that has no name is known as an anonymous inner class in Java. It should be used if you have to override a method of class or interface. Java Anonymous inner class can be created in two ways:
+
+Class (may be abstract or concrete).
+Interface
+
+
+Static Elements:
+
+
+
+Static Inner Classes : 
