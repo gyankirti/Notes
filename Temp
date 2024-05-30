@@ -1,0 +1,164 @@
+Thread in JAVA
+what is the difference between implementing a runnable and implementing a thread
+
+
+Implementing Runnable and extending Thread are two different ways to create threads in Java.
+
+Implementing Runnable Interface:
+
+Implementing the Runnable interface involves creating a class that implements the Runnable interface and 
+providing an implementation for the run() method.
+This approach is preferred because Java supports single inheritance, and by implementing Runnable,
+you leave the option open to extend another class if needed.
+The class implementing Runnable can be passed as an argument to a Thread constructor to create a new thread.
+This approach promotes better code separation, as the thread logic is separated from the thread management logic.
+
+Example:
+java
+Copy code
+public class MyRunnable implements Runnable {
+    @Override
+    public void run() {
+        // Thread logic
+    }
+}
+
+Extending Thread Class:
+
+Extending the Thread class involves creating a new class that directly extends the Thread class and overrides its run() method.
+While this approach is simpler and requires less code, it's less flexible because Java doesn't support multiple inheritance, 
+and extending Thread consumes the class's only inheritance slot.
+Directly extending Thread ties the thread logic with the thread itself, which can lead to less modular code.
+
+Example:
+java
+Copy code
+public class MyThread extends Thread {
+    @Override
+    public void run() {
+        // Thread logic
+    }
+}
+In summary, while both approaches can be used to create threads in Java, 
+implementing Runnable is generally considered a better practice because it allows for better separation of concerns 
+and more flexibility in class design.
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+is the runnable an interface inside thread
+ChatGPT
+ChatGPT
+Yes, the Runnable interface is indeed part of the Thread class's hierarchy in Java. Here's how it fits in:
+
+Thread Class:
+
+The Thread class in Java represents a thread of execution.
+It implements the Runnable interface, which means it provides an implementation for the run() method.
+Additionally, the Thread class provides various methods for thread management, such as starting, pausing, resuming, and stopping threads.
+Runnable Interface:
+
+The Runnable interface defines a single method, run(), which contains the code that is executed by the thread.
+By implementing the Runnable interface, a class can become a task that can be executed by a thread.
+By implementing the Runnable interface, a class can define its thread behavior independently of the Thread class. 
+This separation of concerns allows for more flexibility in designing concurrent applications in Java.
+
+Here's a simple illustration of how Thread and Runnable are related:
+
+java
+Copy code
+public class MyRunnable implements Runnable {
+    @Override
+    public void run() {
+        // Thread logic
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MyRunnable myRunnable = new MyRunnable();
+        Thread thread = new Thread(myRunnable);
+        thread.start();
+    }
+}
+In this example, MyRunnable implements the Runnable interface, 
+and its run() method defines the thread's behavior. 
+Then, an instance of MyRunnable is passed to a Thread object, which starts a new thread to execute the run() method.
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+Countdown Latch
+
+package Multithreading;
+
+import java.util.concurrent.CountDownLatch;
+
+class SomeThread extends Thread{
+	private CountDownLatch latch;
+	public SomeThread(CountDownLatch latch) {
+		this.latch = latch;
+	}
+	@Override
+	public void run() {
+		System.out.println("Started thread: "+Thread.currentThread().getName());
+		System.out.println("Ended thread: "+Thread.currentThread().getName());
+		System.out.println("-------------------------------------------------");
+		
+		latch.countDown(); // releases the latch every time the thread runs
+						   // if we have the count down for more no of times than the latch has been called there is no issue
+	}					   // less no of time if the count down has been called, that will pose an issue
+}
+
+public class countDownLatch {
+	public static void main(String[] args) {
+		CountDownLatch latch = new CountDownLatch(4);
+		SomeThread thread1 = new SomeThread(latch);
+		thread1.start();
+		
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("Main thread: " +Thread.currentThread().getName());
+	}	
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+Blocking Queue in Multithreading
+- Threadsafe
+- app will wait until there is space to perform the operation of adding elements to the queue
+
+
+package Multithreading;
+import java.util.concurrent.ArrayBlockingQueue;
+
+class producer implements Runnable{
+	private ArrayBlockingQueue<Integer> queue;
+	
+	public producer(ArrayBlockingQueue<Integer> queue) {
+		this.queue = queue;
+	}
+	@Override
+	public void run() {
+		while(true) {
+			try {
+				Thread.sleep(1000);
+				queue.put(blockingQueue.counter);
+				System.out.println("Value added in the queue: "+blockingQueue.counter);
+				blockingQueue.counter++;
+			}catch(InterruptedException e){
+				e.printStackTrace();
+			}
+		}
+	}
+	
+}
+public class blockingQueue {
+	public static int counter = 1;
+	public static void main(String[] args) {
+		ArrayBlockingQueue<Integer> queue = new ArrayBlockingQueue(10);
+		Thread thread1 = new Thread(new producer(queue));
+		thread1.start();
+	}
+}
