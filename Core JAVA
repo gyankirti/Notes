@@ -738,3 +738,304 @@ Static Elements:
 
 
 Static Inner Classes : 
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Access Specifier use is not allowed in Interfaces 
+
+
+Whenever we are using an object only once , we can use anonymous object
+
+
+
+Anonymous inner class in Java
+
+when to you use a static inner class?
+	a recommendation is to declare a class as static if and only if all the methods and variables inside the class are static.
+	In real life we would not want some values to be dependent on objects, in those cases we will need static 9inner class.
+	
+Final Keyword
+	
+	
+Every Datatype in Java except String is treated as a primitive datatype, String is treated as a class
+
+
+
+Always use .equals() method in place of using == for comapring 2 things
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+String Literals vs String Objects 
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Collections in Java
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Threads and Concurrency
+
+
+
+Sockets
+Processors 
+
+
+Logical Processors - threads
+	Runnable Threads
+	Running Threads
+	Waiting for blocked thread
+	
+	
+New Thread() - New State -> start()	-> Runnable State()
+					  run() returns			|	run()
+					Terminated state <-	Running state()	
+											|sleep(),wait(),yield()
+										BLocked/waiting state
+										
+										
+Understanding Threads
+
+package Threads;
+
+import static java.lang.Thread.sleep;
+
+class myCounter extends Thread{
+    private int threadNo;
+    public myCounter(int threadNo){
+        this.threadNo = threadNo;
+    }
+    @Override
+    public void run(){
+        try {
+            countMe();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void countMe() throws InterruptedException {
+        for(int i = 0; i<10; i++){
+            sleep(500);
+            System.out.println("thread no: "+threadNo+" and itr no: "+i);
+        }
+    }
+}
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        myCounter ctr1 = new myCounter(1);
+        myCounter ctr2 = new myCounter(2);
+        myCounter ctr3 = new myCounter(3);
+
+        long startTime = System.currentTimeMillis();
+
+        ctr1.start();
+        System.out.println("*********************");
+        ctr2.start();
+        ctr3.start();
+        long endTime = System.currentTimeMillis();
+        sleep(5210);
+        System.out.println("total time required for processing: " + (endTime-startTime));
+    }
+}
+
+
+Approach 2
+
+
+package Threads;
+
+import static java.lang.Thread.sleep;
+import java.util.Random;
+
+class myCounter implements Runnable{
+    private int threadNo;
+    public myCounter(int threadNo){
+        this.threadNo = threadNo;
+    }
+
+
+    @Override
+    public void run() {
+        for(int i = 0; i < 10; i++){
+            try {
+                Random random = new Random();
+                sleep(random.nextInt(500));
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
+            System.out.println("thread no: "+threadNo+" and itr no: "+i);
+        }
+    }
+}
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        Thread thread1  = new Thread(new myCounter(1));
+        Thread thread2  = new Thread(new myCounter(2));
+        thread1.start();
+        thread2.start();
+    }
+}
+
+
+Approach 3
+
+package Threads;
+
+import static java.lang.Thread.sleep;
+import java.util.Random;
+
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                for(int i = 0; i < 10; i++){
+                    try {
+                        Random random = new Random();
+                        sleep(random.nextInt(500));
+                    }catch(InterruptedException e){
+                        e.printStackTrace();
+                    }
+                    System.out.println(i);
+                }
+            }
+        }).start();
+    }
+}
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Synchronizattion under Concurrency Control
+
+Syncronized keyword is used where we can restrict the pausing of the method and it will be running the method in a synchronized fashion
+so whenever we are calling a method, the entire method will finish its execution then only it will be clled by any other thread'
+
+
+Static Synchronization
+Whenever you dont want the method to be accessed by multiple instances and you want the 
+method to be absolutely synchronized throughout everywhere in the application regardless of objects static is the correct way to do so
+
+
+Volatile Keyword
+
+It is used to stop the caching of the thread 
+
+Wait and Notify in Java
+
+-- The application will until the deposit of money has happended and then only the withdrawal method will be called
+
+
+In Java, the wait() method is used in conjunction with notify() and notifyAll() for inter-thread communication in synchronization. 
+When a thread calls wait(), it relinquishes the lock it holds and enters a wait state until another thread notifies it.
+
+The wait() method can throw a InterruptedException if another thread interrupts the waiting thread while it's waiting. 
+This interruption can occur for various reasons, such as when another thread calls interrupt() on the waiting thread.
+
+Therefore, when calling wait(), it's necessary to handle InterruptedException to properly deal with interruption scenarios. 
+
+In the catch block, you can decide how to handle the interruption, which might involve logging the exception, cleaning up resources, or taking other appropriate action.
+
+It's important to handle InterruptedException properly because it's a checked exception, meaning that if you don't catch it,
+ you'll need to declare it in the method signature using throws InterruptedException, which can propagate the exception up the 
+ call stack, potentially leading to unintended consequences.
+ 
+ 
+ ------------------------------------------------------------------------------------------------------------------------------------------
+ 
+ Concurrency control in JAVA using JOINS
+ 
+you're starting a new thread (thread1) to increment the ctr1 variable in a loop. 
+However, you're immediately printing the value of ctr1 after starting the thread. 
+Since the increment operation in the thread is asynchronous, the println statement might execute before the 
+thread finishes its job. As a result, you might not see the expected incremented value of ctr1.
+
+
+package Threads;
+
+public class Joins {
+    public static int ctr1 = 0;
+    public static void main(String[] args){
+        Thread thread1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for(int i = 0; i< 1000;i++){
+                    ctr1++;
+                }
+            }
+        });
+        thread1.start();
+        System.out.println(ctr1);
+    }
+}
+
+If you want to ensure that the println statement executes after the thread has finished its job, you can use the join() method. 
+The join() method waits for the thread to complete its execution before moving on.
+
+
+
+NOTE -
+
+In Java, when you start a new thread using Thread.start(), the code inside the run() method of that thread runs 
+concurrently with the rest of your program.
+
+Concurrency means that multiple tasks can make progress together, seemingly simultaneously, 
+without any one task needing to completely finish before the next one starts. 
+In the case of your code, the main thread and the thread1 are running concurrently.
+
+Here's how it works in your code:
+
+The main thread starts thread1 by calling thread1.start().
+thread1 executes the code inside its run() method concurrently with the main thread.
+Meanwhile, the main thread continues its execution without waiting for thread1 to finish. 
+It immediately moves to the next statement, which is the println statement.
+The println statement prints the current value of ctr1, which is initially 0.
+
+Eventually, thread1 finishes its execution, but since the main thread has already printed the value of ctr1, 
+you may not see the updated value.
+To summarize, concurrency allows multiple threads to execute code simultaneously, enabling tasks to make 
+progress independently of each other. In your code, thread1 runs concurrently with the main thread, potentially 
+leading to non-deterministic behavior if proper synchronization mechanisms are not used.
+
+
+When you call join() on a thread, it means you're explicitly waiting for that thread to complete its execution.
+ During this waiting period, if another thread interrupts the waiting thread (by calling interrupt() on it), 
+ the waiting thread will throw an InterruptedException.
+
+Handling InterruptedException is important because it indicates that the waiting thread has been interrupted, and you need to 
+decide how to respond to this interruption. You might want to clean up resources, perform logging, or take other appropriate actions.
+
+Therefore, when you call join(), you need to handle InterruptedException either by catching it using a try-catch block 
+or by declaring it in the method signature using throws InterruptedException.
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+Thread Pools
+
+Scheduling thread execution can help us with a lot of resource saving and efficient execution of the application 
+Because hardware has limits when we are using a multithreaded application	
+
+Executor Service - Handles the number of threads that need to run concurrently on the basis of user input
+	it needs to be shut down manually, to stop the service
+	
+	
+CountDown Latch in Multithreading
+
+	
+	 
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+JSP 
+
+Expression
+Scriptlet
+Declaration
+Directive
+Comment
+
+
+
+
