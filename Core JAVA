@@ -796,6 +796,33 @@ New Thread() - New State -> start()	-> Runnable State()
 					Terminated state <-	Running state()	
 											|sleep(),wait(),yield()
 										BLocked/waiting state
+
+Thread States:
+
+	Threads can be in different states during their lifecycle, such as:
+	
+	New: When a thread is instantiated but not yet started.
+	
+	Runnable: When the thread is ready to run and waiting for CPU time.
+	
+	Blocked/Waiting: When a thread is waiting for a resource (e.g., I/O operation) or for another thread to notify it.
+	
+	Terminated: When a thread completes its execution.
+
+Thread Synchronization:
+
+	Threads may access shared resources concurrently, which can lead to data inconsistency or race conditions. 
+	
+	Synchronization mechanisms like synchronized blocks, wait() and notify() methods, and Lock interfaces help 
+	
+	coordinate access to shared resources and prevent conflicts.
+	
+Thread Communication:
+
+	Threads can communicate and coordinate their activities through shared memory 
+	
+	(using synchronized methods or blocks) or message passing (using concurrent data structures like BlockingQueue).
+
 										
 										
 Understanding Threads
