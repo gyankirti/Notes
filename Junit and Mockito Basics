@@ -1,0 +1,24 @@
+Junit3 vs Junit4 - main difference was the introduction of annotations in junit4
+
+@BeforeClass - used to execute a statement before all the test cases
+@AfterClass - used to execute a statement after all the test cases 
+@Test(timeout = 500)		- used to set timeout while executing the test
+@Test(expected = illegalArgumentException.class)  - used to handle some exception during test execution
+
+
+
+Mockito and Junit for unit testing
+
+	- This mocking framework helps in the development of testable applications
+	
+	
+When to use mockito?
+	When a comoponent is to be tested, but that component is dependent on another comoponent which is under development
+	When the real comoponents perform slowly, mock objects are used to perform the testing
+	When there are any infra concerns which makes the testing impossible
+	
+What is a Stub?
+	Stubs are objects holding predefined data and uses the data to give reponses during the tasks
+	It can be referred to as an object that looks like real object with least number of methods
+	They return the predefined outputs no matter what the inputs is 
+	These stubs are used to reduce complexities that occur while creating the real objects
