@@ -1,0 +1,381 @@
+Springboot and Spring Microservices Training
+
+SpringBoot -
+	
+	Spring Framework + Embedded HTTP Servers(Tomcat,Jetty) - XML<Bean> Configuration = Spring Boot
+																or @Configuration 
+
+Limitations of monolithic architecture is overcome by using microservices architecture
+
+MicroServices can be written in different languages, can be deployed on different platforms and can use different databases and still they can 
+communicate with each other.
+
+A REST controller, 
+often annotated with @RestController in frameworks like Spring MVC, is a Java class that handles 
+incoming HTTP requests and produces HTTP responses typically in the form of JSON or XML.
+
+Annotations - getMapping vs RequestMapping
+
+	In Spring Boot, @GetMapping and @RequestMapping are annotations used to map web requests to specific handler 
+	methods in your Spring MVC controllers. Here’s a breakdown of their differences:
+	
+	@RequestMapping
+	@RequestMapping is a versatile annotation that maps HTTP requests to handler methods of a controller. 
+	It has been available since Spring 3.0 and can be used for mapping HTTP methods (GET, POST, PUT, DELETE, etc.) to specific paths.
+	
+	Usage: You can specify the HTTP method and the path in a single annotation, like @RequestMapping(method = RequestMethod.GET, path = "/path"), 
+	or more concisely with just @RequestMapping("/path") for GET by default.
+	Versatility: It allows handling of various HTTP methods and can handle more complex mappings by specifying parameters like 
+	headers, media types, and more.
+	
+	
+	Example:
+	
+	java
+	Copy code
+	@RequestMapping(value = "/hello", method = RequestMethod.GET)
+	public String hello() {
+		return "hello";
+	}
+	
+	
+	
+	@GetMapping
+	@GetMapping is a specialized form of @RequestMapping that is introduced in Spring 4.3 and is specifically aimed at handling GET requests.
+	
+	Conciseness: It is a shortcut for @RequestMapping(method = RequestMethod.GET) with a specific path.
+	Readability: By using @GetMapping("/path"), it makes the intent of handling only GET 
+	requests clear and avoids specifying the HTTP method explicitly.
+	Example:
+	
+	java
+	Copy code
+	@GetMapping("/hello")
+	public String hello() {
+		return "hello";
+	}
+	
+	
+	
+	Key Differences
+	Purpose: @RequestMapping is a general-purpose annotation for mapping HTTP requests, 
+	allowing you to specify various HTTP methods and conditions. 
+	@GetMapping is a specialized version specifically for handling GET requests, 
+	providing a more concise and readable way to map GET requests to controller methods.
+	
+	Readability: @GetMapping enhances readability and reduces verbosity when you only need to map GET requests, 
+	compared to @RequestMapping which requires specifying the HTTP method explicitly.
+	
+	Version: @GetMapping is available from Spring 4.3 onwards, whereas @RequestMapping has been available since earlier versions of Spring.
+	
+	Recommendation
+	Use @GetMapping when you want to handle only GET requests for a particular endpoint. It makes the code cleaner and more understandable.
+	
+	Use @RequestMapping when you need to handle multiple HTTP methods or have more complex mappings that require specifying additional 
+	conditions beyond just the path.
+	
+	In summary, while both annotations serve the purpose of mapping HTTP requests to controller methods, @GetMapping provides a 
+	specialized and more readable way to handle GET requests specifically, while @RequestMapping remains more versatile for handling 
+	various HTTP methods and advanced mapping scenarios.
+
+
+What is JPA and Hibernate?
+	JPA (Java Persistence API) with Hibernate refers to using Hibernate as the implementation provider for JPA within a Java application. Here’s what this combination means:
+	
+	Java Persistence API (JPA)
+	Standardized API: JPA is a Java specification for accessing, persisting, and managing data between Java objects and a relational database. It provides a set of interfaces and annotations that define the management of relational data in applications.
+	
+	Object-Relational Mapping (ORM): JPA simplifies the process of mapping Java objects to database tables and vice versa. It allows developers to work with Java objects rather than directly dealing with SQL queries and database-specific details.
+	
+	Hibernate
+	ORM Framework: Hibernate is one of the most popular implementations of JPA and acts as an ORM framework. It implements the JPA specification and provides additional features beyond what JPA defines.
+	
+	Features: Hibernate handles tasks such as mapping Java classes to database tables (and vice versa), generating SQL to perform CRUD (Create, Read, Update, Delete) operations, managing object relationships (like one-to-many and many-to-many), and providing query capabilities through HQL (Hibernate Query Language) or Criteria API.
+	
+	Using JPA with Hibernate
+	Integration: When using JPA with Hibernate, you write your persistence layer using JPA annotations and interfaces. Hibernate then provides the underlying implementation for these interfaces and annotations, allowing your application to interact with the database.
+	
+	Portability: JPA provides portability across different ORM frameworks. If you decide to switch from Hibernate to another JPA implementation in the future (such as EclipseLink or OpenJPA), the code written using JPA annotations should remain largely unchanged, although there might be some differences in configuration and behavior.
+	
+	Benefits
+	Productivity: JPA with Hibernate simplifies database interactions by abstracting away SQL queries, allowing developers to focus more on business logic and less on database details.
+	
+	Standardization: JPA provides a standardized way of working with relational databases in Java applications, promoting code reusability and maintainability.
+	
+	Flexibility: Hibernate extends the capabilities of JPA with additional features and optimizations, making it suitable for a wide range of enterprise applications.
+	
+	In summary, "JPA with Hibernate" means leveraging Hibernate as the implementation provider for JPA within a Java application, benefiting from both the standardization of JPA and the extended features and capabilities provided by Hibernate as an ORM framework.
+
+What is the difference between @Controller and @RestController?
+
+	Key Differences:
+
+		Purpose: Controllers (@Controller) are used for handling web pages and rendering views in traditional web applications. 
+		RestControllers (@RestController) are used for creating RESTful APIs that return data (typically in JSON or XML format) directly to the client.
+		
+		Response Handling: Controllers return views (HTML pages or other view types) that are rendered by the server. 
+		RestControllers return data objects that are serialized directly into the HTTP response body.
+		
+		Annotations: Controllers typically use @Controller, whereas 
+		RestControllers use @RestController along with other annotations like @GetMapping, @PostMapping, etc., to map HTTP methods to handler methods.
+		
+		
+		REST means you transfer data from the server to the client not the layout
+		
+		
+Example
+
+	@Controller
+	public class HomeController {
+	
+		@RequestMapping("/")
+		public String greet(){
+			return "Welcome to this Project";
+		}
+		
+	----> this gives an error, because it means that it searches for a file to return to the request
+	
+	@RestController
+	public class HomeController {
+	
+		@RequestMapping("/")
+		public String greet(){
+			return "Welcome to this Project";
+		}	
+	equivalent to 
+	@Controller
+	public class HomeController {
+	
+		@RequestMapping("/")
+		@ResponseBody	// Return me the data, not the layout
+		public String greet(){
+			return "Welcome to this Project";
+		}
+	
+	If we have multiple Controllers, how does spring know which controller to go to?
+		Front Controller - it knows for which request, to go to which controller
+	
+	If a controller wants data, it will ask data from the service layer, not the Database
+
+What is an entity Java Class?
+
+	In the context of Java Persistence API (JPA), an entity class is a Java class that represents an object stored in a database. 
+	Here's a detailed explanation:
+	
+	Entity Class in JPA
+	Definition: An entity class in JPA is a plain Java class (POJO - Plain Old Java Object) that is annotated with JPA annotations 
+	to define its mapping to a corresponding table in the database.
+	
+	Purpose: The primary purpose of an entity class is to model and represent data stored in a relational database in an object-oriented way. 
+	Each instance of an entity class typically corresponds to a row in the database table.
+	
+	Characteristics:
+	
+	Annotations: Entity classes use JPA annotations such as @Entity, @Table, @Id, @GeneratedValue, etc., to define their mapping to 
+	database tables, primary keys, relationships between entities, and other mapping details.
+	
+	Attributes: The attributes (fields or properties) of the entity class represent columns in the corresponding database table.
+	
+	Relationships: Entity classes can define relationships with other entity classes using annotations like 
+	@OneToOne, @OneToMany, @ManyToOne, and @ManyToMany.
+	
+	Example
+	Here's an example of a simple entity class:
+	
+		java
+		Copy code
+		import javax.persistence.*;
+		
+		@Entity
+		@Table(name = "users")
+		public class User {
+		
+			@Id
+			@GeneratedValue(strategy = GenerationType.IDENTITY)
+			private Long id;
+		
+			@Column(name = "username")
+			private String username;
+		
+			@Column(name = "email")
+			private String email;
+		
+			// Getters and setters
+			// Constructors
+			// Other methods
+		}
+	In this example:
+	
+	@Entity indicates that this class is a JPA entity.
+	
+	@Table specifies the database table name (users) to which this entity is mapped.
+	
+	@Id and @GeneratedValue are used to define the primary key (id) and its generation strategy.
+	
+	@Column annotations define the mapping of class fields (username and email) to database columns.
+	
+	Usage
+	Entity classes are used extensively in JPA-based applications to:
+	
+		Perform CRUD operations (Create, Read, Update, Delete) on database records.
+		
+		Define relationships between entities (e.g., one-to-one, one-to-many).
+		
+		Query data using JPQL (Java Persistence Query Language) or Criteria API.
+	
+	Benefits
+		
+		Abstraction: Entity classes abstract away the complexities of SQL queries and database operations, allowing developers to work with Java objects instead.
+		
+		Standardization: JPA provides a standardized way to define entity mappings, promoting code reusability and maintainability.
+		
+		Object-Relational Mapping: Entity classes facilitate seamless mapping between relational database tables and Java objects, promoting cleaner and more efficient code.
+		In summary, an entity class in JPA represents a persistent data entity stored in a database, utilizing JPA annotations to define its mapping and relationships with other entities.
+		
+		
+	Service Cannot Exactly talk to the DB
+	
+		Client -> Controller -> Service -> DAO Layer -> DB
+			   <-			 <-			<-			 <-
+		
+		
+			
+	In the context of Java Spring Framework, @RestController is an annotation used to define a 
+	class as a RESTful controller. Here’s what it signifies:
+	
+	@RestController Annotation
+		Purpose: The @RestController annotation combines @Controller and @ResponseBody. 
+		It is used to create RESTful web services using Spring MVC that directly return JSON, XML, 
+		or any other type of data depending on the request.
+	
+	Behavior:
+	
+		@Controller: Marks a class as a Spring MVC controller.
+		@ResponseBody: Ensures that the return value of methods in the controller is automatically serialized into the HTTP response body.
+		Characteristics:
+	
+	Controllers annotated with @RestController are typically used to build RESTful web services.
+	Methods inside a @RestController class handle HTTP requests (GET, POST, PUT, DELETE, etc.) and 
+	return data directly in a format like JSON or XML, rather than relying on a view resolver to render a web page.
+		
+	
+	Example :- 
+	
+	import org.springframework.web.bind.annotation.*;
+
+	@RestController
+	@RequestMapping("/api/books")
+	public class BookController {
+	
+		@Autowired
+		private BookService bookService;
+	
+		@GetMapping("/{id}")
+		public ResponseEntity<Book> getBookById(@PathVariable Long id) {
+			Book book = bookService.findBookById(id);
+			if (book != null) {
+				return ResponseEntity.ok(book);
+			} else {
+				return ResponseEntity.notFound().build();
+			}
+		}
+	
+		@PostMapping
+		public ResponseEntity<Book> createBook(@Valid @RequestBody Book book) {
+			Book createdBook = bookService.createBook(book);
+			return ResponseEntity.status(HttpStatus.CREATED).body(createdBook);
+		}
+	
+		@PutMapping("/{id}")
+		public ResponseEntity<Book> updateBook(@PathVariable Long id, @Valid @RequestBody Book book) {
+			Book updatedBook = bookService.updateBook(id, book);
+			if (updatedBook != null) {
+				return ResponseEntity.ok(updatedBook);
+			} else {
+				return ResponseEntity.notFound().build();
+			}
+		}
+	
+		@DeleteMapping("/{id}")
+		public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+			boolean deleted = bookService.deleteBook(id);
+			if (deleted) {
+				return ResponseEntity.noContent().build();
+			} else {
+				return ResponseEntity.notFound().build();
+			}
+		}
+	}
+	
+	In this example:
+	
+	@RestController declares the BookController class as a REST controller.
+	
+	@RequestMapping("/api/books") specifies the base URI ("/api/books") for all mappings in this controller.
+	
+	Methods (getBookById, createBook, updateBook, deleteBook) handle GET, POST, PUT, and DELETE requests respectively, 
+	returning appropriate HTTP responses and utilizing Spring's ResponseEntity for flexibility in response status and body.
+	
+	By using @RestController, you're leveraging Spring's capabilities to easily build and expose RESTful APIs, 
+	enhancing interoperability and integration capabilities within your application ecosystem.
+	Spring Boot Microservices
+	
+	Service is an application component which provides functionality to other components(web app, mobile app, desktop app etc.)
+	Service-Oriented architecture is an architectural pattern in which components provide services to other components via a communications 
+	protocol over a network (HTTP)
+	
+	
+	@RequestBody Annotation - Responsible for sending data into the request and 
+
+Models - class level representation of our db tables
+
+Adding repositories and servce classes in SpringBoot
+
+Adding Seed Data in The Database
+
+
+	CommandLineRunner - In the context of Spring Boot, a command-line runner refers to a mechanism provided by Spring Boot 
+	itself to execute code at application startup.
+	
+-----------------------------------------------------------------------------------------------------------------------------------------------------	
+	@GetMapping("/register")
+    public String register(Model model){
+        Account account = new Account();
+        model.addAttribute("account", account);
+        return "register";
+    }
+	
+	Adding the attribute "account" to the Model in the register method (model.addAttribute("account", account);)
+	means that you are making the account object available to the view (register.html or register.jsp) when the page 
+	associated with /register is rendered.
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+Load Balancing - 
+
+
+	Monolithic System Adv
+		-> Single Codebase - for small applications
+			- easy to develop/debug/deploy
+			- Google IDE support
+		-> Easy to scale horizontally ( but can only scale in an "un-differentiated manner")
+		-> a central-ops team can efficiently handle
+
+
+
+
+
+
+
+		
+Microservices	
+	
+	Asynchronous Request - user sends the request, server processes the request and sends the reponse and the server forgets about the client
+	
+	Synchronous Request - after session getting started the server will remember me for sometime until the session is not closed 
+		e.g. ATM pin - i insert a card and the session started, then it will remember me for sometime until i am done with my transaction
+		
+	States of an application 
+	
+	Stateless - 
+	
+	Stateful - 
