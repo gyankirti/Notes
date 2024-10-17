@@ -1,0 +1,838 @@
+KUBERNETES and DOCKER
+
+	- Container Orchestration Tool
+	
+	What a container is and what problem it solves
+		A way to Package applications with all the necessary dependencies and configuration
+		That package is portable and can be easily stored ans shared around
+		MAkes development and deployment efficient
+	
+	Container Repository
+		Special type of storage for containers
+		
+	Public Repo for DOCKER - DOCKER Hub
+	
+	Docker isolates application from infrastructure which includes container runtime, OS and Hardware
+	- Written in GO
+	- Uses linux kernel's feature to deliver functionality
+	- uses the namespaces technology to provide an isolated workspace called container
+	- creates a set of namespaces for every container and each aspect runs in separate namespaces with access limited to that namespace
+	
+Challenges for Docker 
+	- Requiring high performance or security 
+	- Based on monolith architecture
+	- Apps using ricj GUI features 
+	- Performing standard desktop or limited Functions
+	
+DOCKER CONTAINER CREATION PROCESS
+
+ - Create a DockerFile
+ - Use the DockerFile to createa Container image
+ - Use the container image to create a running container
+ 
+ 1. FROM alpine
+	CMD ["ECHO",
+	"Hello World!"]
+	FROM - Defines the base images
+	CMD - Prints hello world on the terminal
+	
+2. create a container image using the build command
+						   version
+	docker build -t my-app:v1.
+	command       tag  repo	 current directory
+	
+3. to check the image creation
+	docker images
+	
+	create the container
+	
+	docker run my-app:v1
+ 
+	
+Before Containers
+		Each developer needs to install the application specific version
+		Installation process different on each OS env.
+		Many steps where something could go wrong
+		This can be a very tedious task, depending on the number of services to be installe
+	Application Deployment
+		JAR File+DB - Dev teams give this to ops team 
+		Ops team handles setting up the env to deploy those applications
+		Configure and install everything
+		
+		Problem - Dependency versions
+		Misunderstandings - everything present in a textual guide
+	
+After Containers
+	now we have the developers and operations working in a single team
+	to package the application in a container
+	
+	So only thing to be done is run the docker command to run the docker command which pulls the 
+	container you stored somewhere on the repo.
+	No Environmental configuration needed on the server - except for docker runtime
+	Kubernetes offers the abstraction of the deployment env for the deploying of complex applications easier
+	docker command same for all operating systems
+	
+
+Docker Objects 
+	- DockerFile
+	- Image
+	- Container
+	- Network
+	- Storage
+	- Other Plugins
+	
+	A Dockerfile is a text file that contains instructions needed to create an image. 
+	You can create a Dockerfile using any editor from the console or terminal.
+	
+	FROM - Defines the base image
+	RUN - Executes arbitrary commands
+	CMD - Defines default commands for container execution
+
+Docker image 
+	- Read only template with instructions for creating Docker Container
+	- Built using in a dockerfile; a new read only image layer is created for each instruction 
+	- a writeable layer is added when an image is run as a container
+	
+Container Image Naming
+	hostname/repository:tag
+
+
+Docker Container 
+	Runable instance of an image 
+	Created , stopped, started or deleted using the Docker API or CLI
+	Can connect to multiple networks, attach storage or create a new image based on its current state
+	Isolated from other containers and its host machine
+	
+Networks - used for the isolated container communication
+
+Storage - Docker uses volume and bind mounts to persist data even after a container stops
+
+Plugins - Storage plugins provid the ability to connect to external and storage platforms
+
+
+Docker architecture consists of a Docker Client, a Docker Host and a registry
+The client interacts with the host using commands and REST API's
+
+The docker host also includes the daemon, called dockerd
+
+Docker host also manages images , containers , namespaces , networks storage, plugins and add - ons
+
+Containerization is the process used to build, push, and run an image to createn a running container
+
+
+Running an image gives this o/p in the terminl
+
+o generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+ 
+ 
+ 
+49848eb950f7
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	docker run postgres
+	docker run redis
+	docker run ...
+	Standardises the process of running any service on any local dev env
+	
+	We can have different versions of the same applications running on your local env
+	
+	
+Challenges of using Containers
+	-> security impacted if OS affected
+	-> difficult to manage thousands of containers
+	-> complex to migrate legacy projects to container technology
+	-> difficult to right size containers for specific scenarios
+	
+	
+Different container applications
+	Docker - robust and most popular
+	Podman - Daemon - less architecture providing more security than docker containers 
+	LXC - preffered for data intensive apps and ops 
+	Vagrant - offer highest level of isolation on the running physical machine
+
+Deployment before containers
+	Developement team -> developement artifact+installation instructions to install that onto the server
+		Dev team hands these artifacts and instructions over to the ops team 
+		Ops team handles installing and configuring these apps and its dependencies
+		
+	Problems - dependency version conflicts
+			 - miscommunications where dev team fails to mention something
+			 - human errors
+After containers
+	Now, developers create an application package that contains the code and also the dependencies and the config for the application
+	Instead of textual, everything is packaged inside the docker artifact
+	No configuration needed on the server , Less room for 
+	
+	Ops team now just need to run the docker command to get that package which developers created and run that on the server
+	Just one docker runtime installation needed
+
+Virtual Machine VS DOCKER
+	How does docker run its container
+	
+	OS applications
+	OS kernel - talks with the hardware - middleman beetween application and hardware
+	
+	Docker virtualizes the application layer only
+	
+	VM virtualizes both the app layer and the kernel
+	
+	Docker images are much smaller
+	Docker needs time to start becoz it just uses the kernel of the host 
+	But VM needs to boot up its kernel everytime it starts
+	
+	Vm is compatibnle with all OS
+	Docker doesn't run on all OS because of different kernel with different OS
+	
+	Linux app image / Windows Kernel ****
+	
+	
+What is a docker 
+	Virtualization software which makes developing and deploying applications easier
+	It does that by packaging the application with all the necessary dependancies
+	and everything which the application needs to run - runtime and env configs
+	
+	why is this a big deal
+
+	Layers of linux based image, application image with configuration
+	
+	Image VS Container
+	
+	Image is the actual package - anything and everyting which is needed to run the application
+	
+	Container is when i pull that image on my local machine and i actually start it
+	-> actually starts the application
+	-> it is the running instance of an image
+	
+	If its not running its an image basicaly, just an artifact
+	If i start it and actually run iton my machine it is a container
+	
+Docker Registry
+	a storage and distribution system for docker images
+	find and share docker images
+	
+Image versioning
+	
+	 
+	 
+	 
+BASIC DOCKER COMMANDS
+
+	Container is a running env for an image
+	Images have versions
+	
+	
+	docker ps - to check if a container is running or not
+	
+	docker images - list of all docker images
+	
+	docker pull <name of the image>
+	
+	docker run <name of the image> - creates a container from a given image and starts it
+		docker generates a random name for the container automatically if you don't specify oone
+		
+	
+	docker run -d <name of the image> - -d or --detach
+										 runs the conatiner in the background and prints the container ID
+										 
+	docker logs {container} - viwe logs from the service running inside the container, which are present at the time of the execution
+	
+	docker pulls the image automatically if it doesn't find it locally
+		- any image which is present on the docker hub needs to be named
+		docker run <image_name>
+		
+	docker run -d -p 9000:80 nginx:1.23 // -p or --publish -> publish a container's port to the host
+		i.e.      -p{host port}:{container port}
+		
+PORT BINDING:	
+	How do we access this container?
+		container is runing in a closed docker network
+		we need to expose the container port to the host(the machine the container rubs on)
+		
+		port binding - bind the container's port to the host's port to make the service to the outside world
+		
+		
+Start and Stop Containers
+			
+	docker run command everytime creates a new container and doesn't re use the previous container
+	
+	docker ps // gives a list of only the running containers
+	
+	docker ps -a // -a gives a lis of all the containers - running or stopped
+
+	docker start <container name> // starts the stopped docker containers
+	
+	docker run --name -d -p 9000:80 nginx:1.23 // --name -> assigns a name to the container
+	
+	
+	
+Private and Public Docker Registries
+
+	Private 
+		you need to authenticate before accessing the registry
+		all big cloud providers offer registries
+		Amazon ECR , Google container registry
+		Nexus
+
+Registry Vs Repository
+
+	Registry - A service which provides storage
+				can be hosted by a 3rd party like AWS or by yourself
+				
+	Repository - Inside a registry we can have multiple repositories containing
+				different application images 
+	Privte and public repositories
+	
+	
+Building own Docker Images
+	How to take our created application code and created a docker image?
+	
+	We need to create a definition of how to build an image from our application
+	definition written in a docker file
+	
+
+Dockerfile
+
+	Base Image - Each docker image is based on a base image 
+		mostly a lightweight linux operating system image which is based on whatever application you need to be installed on over it
+	
+	
+	FROM - dockerfiles must begin with a FROM instruction 
+			build this image from the specified image
+	
+	RUN - build this image from a specified image
+		  will execute any command in a shell inside the container env
+		  
+	COPY - copies the files or directories from <src> and adds them to the filesystem
+	of the container at the path <dest>
+	
+	While run is executed in the container copy is executed on the host
+	
+	WORKDIR - sets the working directory for all the following commands
+			like changing the directory in linux -- cd...
+			basically we think of the conatineras its own isolated env
+			with a linux operating system with node and npm installed
+	
+	CMD - the instruction that is to be executed when a docker container starts
+		  there can only be one "CMD" instruction in a Dockerfile
+	
+	Now we also need the application code inside the container
+	
+	
+	FROM node:19-alpine
+	
+	COPY package.json /app/  -- / at the end is given so that docker knows that it has to create a folder named app
+	
+	COPY src /app/
+	
+	WORKDIR /app
+	
+	RUN npm install
+	
+	CMD ["node","server.js"]
+	
+Now we have the definition in the dockerfile ,now we have to build the image
+	
+	docker build -t node-app:1.0 .
+								 this dot . means the dockerfile is present in the current directory
+	
+	-t sets a name optionally a tag in the "name:tag" format
+	
+	
+A docker image consists of layers
+
+	Each instruction in the dockerfile creates one layer 
+	These layers are stacked and each one is a delta of the changes from the prvious lauer
+	
+Running our docker image 
+	docker run -d -p 3000:3000 node-app:1.0
+					host   container
+					
+					
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Container Orchestration
+
+Container orchestration is a process which automate container lifestyle of containerized applications
+Main Point - Automates the container lifecycle resulting in faster deployment, reduced errors, higher availibilty and security
+		- Deployment
+		- Management
+		- Scaling
+		- Networking
+		- Availability
+	Orchestration is a necessity in large dynamic environments
+	Advanteges - 
+		- Streamlines Complexity
+		- Enables hand-off deployment and scaling
+		- increases speed efficiency and agility
+		- Seamlessly integrates into CI/CD workflows
+		- Allows developement teams to use resource more efficiently
+	An important part of an organisation's SOAR requirements
+	
+	Orchestration uses YAML files or JSON files configure containers to :
+		Configuration Files:
+			-> Find Resources 
+			-> Establish a network 
+			-> Store Logs
+		Deployment Scheduling:
+			- Automatically schedules new container deployment
+			-Finds the right host on the basis on predefined settings  or restrictions
+		Manages Container Lifecycle
+			-> Configuration file specs inform container decisions
+				-> System Parameters
+				-> File Parameters
+		Scaling and Productivity
+			-> Automation is used to :
+				-> Maintain Productivity
+				-> Support Scaling
+KUBERNETES
+Open source system for automating deployment, scaling and management of containerized applications.
+It helps us manage applications that are made up of 100's of containers
+in different types of env's  
+
+Key Points
+	
+		A container is a unit of software that encapsulates everything needed to build, ship, and run applications.  
+		
+		Containers lower deployment time and costs, improve utilization, automate processes, and support next-gen applications (microservices). Major container vendors include Docker, Podman, LXC, and Vagrant. 
+		
+		Docker is an open platform used for developing, shipping, and running applications as containers. 
+		
+		Docker containers are not a good fit for applications based on monolithic architecture or applications that require high performance or security. 
+		
+		Docker architecture consists of the Docker client, the Docker host, and the container registry. 
+		
+		The Docker host contains objects such as the Dockerfiles, images, containers, networks, storage volumes, and other objects, such as plugins and add-ons. 
+		
+		Docker uses networks to isolate container communications. 
+		
+		Docker uses volumes and binds mounts to persist data even after a container stops running. 
+		
+		Plugins, such as storage plugins, provide the ability to connect to external storage platforms. 
+		
+	
+
+
+Cheat Sheet
+
+	Cheat Sheet: Docker CLI
+		Command	Description
+		curl localhost							Pings the application.
+		docker build							Builds an image from a Dockerfile.
+		docker build . -t						Builds the image and tags the image id.
+		docker CLI								Start the Docker command line interface.
+		docker container rm						Removes a container.
+		docker images							Lists the images.
+		docker ps								Lists the containers.
+		docker ps -a							Lists the containers that ran and exited successfully.
+		docker pull								Pulls the latest image or repository from a registry.
+		docker push								Pushes an image or a repository to a registry.
+		docker run								Runs a command in a new container.
+		docker run -p							Runs the container by publishing the ports.
+		docker stop								Stops one or more running containers.
+		docker stop $(docker ps -q)				Stops all running containers.
+		docker tag								Creates a tag for a target image that refers to a source image.
+		docker –version							Displays the version of the Docker CLI.
+		exit									Closes the terminal session.
+		export MY_NAMESPACE						Exports a namespace as an environment variable.
+		git clone								Clones the git repository that contains the artifacts needed.
+		ibmcloud cr images						Lists images in the IBM Cloud Container Registry.
+		ibmcloud cr login						Logs your local Docker daemon into IBM Cloud Container Registry.
+		ibmcloud cr namespaces					Views the namespaces you have access to.
+		ibmcloud cr region-set					Ensures that you are targeting the region appropriate to your cloud account.
+		ibmcloud target							Provides information about the account you’re targeting.
+		ibmcloud version						Displays the version of the IBM Cloud CLI.
+		ls										Lists the contents of this directory to see the artifacts.
+		
+		
+Glossary
+
+		Glossary: Container Basics
+			Term									Definition
+			Agile									is an iterative approach to project management and software development that helps teams deliver value to their customers faster and with fewer issues.
+			Client-server architecture				is a distributed application structure that partitions tasks or workloads between the providers of a resource or service, called servers, and service requesters, called clients.
+			A container								powered by the containerization engine, is a standard unit of software that encapsulates the application code, runtime, system tools, system libraries, and settings necessary for programmers to efficiently build, ship and run applications.
+			Container Registry						Used for the storage and distribution of named container images. While many features can be built on top of a registry, its most basic functions are to store images and retrieve them.
+			CI/CD pipelines							A continuous integration and continuous deployment (CI/CD) pipeline is a series of steps that must be performed in order to deliver a new version of software. CI/CD pipelines are a practice focused on improving software delivery throughout the software development life cycle via automation.
+			Cloud native							A cloud-native application is a program that is designed for a cloud computing architecture. These applications are run and hosted in the cloud and are designed to capitalize on the inherent characteristics of a cloud computing software delivery model.
+			Daemon-less								A container runtime that does not run any specific program (daemon) to create objects, such as images, containers, networks, and volumes.
+			DevOps									is a set of practices, tools, and a cultural philosophy that automate and integrate the processes between software development and IT teams.
+			Docker									An open container platform for developing, shipping and running applications in containers.
+			A Dockerfile							is a text document that contains all the commands you would normally execute manually in order to build a Docker image. Docker can build images automatically by reading the instructions from a Dockerfile.
+			Docker client							is the primary way that many Docker users interact with Docker. When you use commands such as docker run, the client sends these commands to dockerd, which carries them out. The docker command uses the Docker API. The Docker client can communicate with more than one daemon.
+			Docker Command Line Interface (CLI)		The Docker client provides a command line interface (CLI) that allows you to issue build, run, and stop application commands to a Docker daemon.
+			Docker daemon (dockerd)					creates and manages Docker objects, such as images, containers, networks, and volumes.
+			Docker Hub								is the world's easiest way to create, manage, and deliver your team's container applications.
+			Docker localhost						Docker provides a host network which lets containers share your host’s networking stack. This approach means that a localhost in a container resolves to the physical host, instead of the container itself.
+			Docker remote host						A remote Docker host is a machine, inside or outside our local network which is running a Docker Engine and has ports exposed for querying the Engine API.
+			Docker networks							help isolate container communications.
+			Docker plugins							such as a storage plugin, provides the ability to connect external storage platforms.
+			Docker storage							uses volumes and bind mounts to persist data even after a running container is stopped.
+			LXC	LinuX Containers 					is a OS-level virtualization technology that allows creation and running of multiple isolated Linux virtual environments (VE) on a single control host.
+			IBM Cloud Container Registry			stores and distributes container images in a fully managed private registry.
+			Image									An immutable file that contains the source code, libraries, and dependencies that are necessary for an application to run. Images are templates or blueprints for a container.
+			Immutability							Images are read-only; if you change an image, you create a new image.
+			Microservices							are a cloud-native architectural approach in which a single application contains many loosely coupled and independently deployable smaller components or services.
+			Namespace								A Linux namespace is a Linux kernel feature that isolates and virtualizes system resources. Processes which are restricted to a namespace can only interact with resources or processes that are part of the same namespace. Namespaces are an important part of Docker’s isolation model. Namespaces exist for each type of resource, including networking, storage, processes, hostname control and others.
+			Operating System Virtualization			OS-level virtualization is an operating system paradigm in which the kernel allows the existence of multiple isolated user space instances, called containers, zones, virtual private servers, partitions, virtual environments, virtual kernels, or jails.
+			Private Registry						Restricts access to images so that only authorized users can view and use them.
+			REST API								A REST API (also known as RESTful API) is an application programming interface (API or web API) that conforms to the constraints of REST architectural style and allows for interaction with RESTful web services.
+			Registry								is a hosted service containing repositories of images which responds to the Registry API.
+			Repository								is a set of Docker images. A repository can be shared by pushing it to a registry server. The different images in the repository can be labelled using tags.
+			Server Virtualization					Server virtualization is the process of dividing a physical server into multiple unique and isolated virtual servers by means of a software application. Each virtual server can run its own operating systems independently.
+			Serverless								is a cloud-native development model that allows developers to build and run applications without having to manage servers.
+			Tag										A tag is a label applied to a Docker image in a repository. Tags are how various images in a repository are distinguished from each other.
+
+
+
+
+
+Kubernetes Arch.
+	Kubernetes cluster is made up with at least one master node and multiple worker nodes, 
+		where each worker node has a kubelet process running on it
+	
+	Kubelet process makes it easier for the cluster to talk to each other and actually running tasks on the worker nodes
+	
+	Masternode -> has an API server -> which is the entry point to the k8s server
+				  controller manager -> keeps track of what's 
+				  scheduler -> ensure pods placement -> decides on which node new pod be scheduled
+				  etcd key value storage -> holds the info about the kubernetes cluster at any time
+											So it has the config data, and all the status data of each node and each container inside of thagt node
+											We can recover the whole cluster state using the etcd snapshot 
+											
+	Virtual Network -> turns all the nodes inside of a cluster into one powerful machine that has the sum of all the 
+	resourcees of the individual nodes
+	
+	Kubernetes assigns both IPV4 and IPV6 adresses to pods and services.
+
+	Kubrnetes Ecosystem - 
+		-> Contains services, support and tools that are widely available
+		-> Provides additional kubernetes services 
+			-> container images 
+			-> Storing images in the container registry
+			-> Application logging and monitoring
+			-> Continous improvement and Continous Delivery
+				  
+	Kubernetes API server 
+		-> Exposes the kubernetes API
+		-> Front-end for the Kubernetes control plane
+		-> All communication in the cluster utilizesthis API
+		-> Designed to scale horizontally and balance traffic between them
+		
+	etcd 
+		-> Highly available, distributed key-value store that contains all
+			cluster data 
+		-> stores deployment config data, the desired state and meta data in a way
+			that can be accessed in a common location
+	
+	Kuberenets Scheduler
+		-> Assigns newly created Pods to nodes
+		-> it select sthe most optimal node according to the kubernetes scheduling principles, 
+		   config options and available resources.
+	Kubernetes Controller Manager
+		-> Runs controller that interact with underlying cloud providers
+		-> Links slusters into a cloud provider's API
+		
+	Nodes - worker machines in kubernetes
+		  -> may be worker or physical machine
+		  -> managed by the control plane 
+		  -> Contain the services necessary to run applications
+		  -> Nodes include pods which are the smallest deployment entity in kubernetes
+		  
+	Kubelet - 
+		-> Communicates with the api Server
+		-> Ensure that pods and their associated containers are running 
+		-> Reports to the control plane on the pod's health and status
+
+	Container Runtime
+		-> Downloads images and runs container
+		-> Kubernetes implements an interface so that thi component is pluggable
+		-> Docker is a well known runtime
+	Kubernetes Proxy 
+		- Network Proxy
+		-> Maintains network rules that allow communication to the pods
+		
+	Components of KUBERNETES
+	
+	Pod - 
+		->Simplest unit in kubernetes 
+		-> Represents processes running in your cluster 
+		-> Encapsulates one or more containers
+		-> Replicating a pod  serves to scale applications horizontally
+	
+	ReplicaSet 
+		-> set of horizontally scaled running pods
+		Config File for ReplicaSet File defines 
+			-> no. of replicas
+			-> Pod template
+			-> Selector to identify which pods it can acquire
+
+	
+	Service - 
+		->Pods communicate with each other using a service
+		->a static or permanent ip adress which can be attached to each pod
+			->Lifecycle of the service and pod are not connected , so even if the pod dies the service and its ip adress will stay
+		-> Is a rest object like pods
+		-> Lof=gical Abstraction for a set of pods in a cluster
+		-> Provides policies for accessing the pods and cluster
+		-> Acts as a load Balancer across the pods 
+		-> Is assigned a unique IP adress for accessing applications deployed on Pods
+		
+		
+		Ext. Service - service which opens the comm. from ext. sources
+		Int. Service - we specify this while opening one
+		
+		
+		4 types of Services 
+			
+			-> ClusterIP
+				-> default and most common service type
+				-> I s assignes a cluster-internal IP adress to the cluster-internal IP address
+				 to the clusterIp service that makes the service only reachable within the cluster
+				-> Cannot make requests to service(pods) from outside the cluster
+				-> we set the clusterIP address in the service definition file
+				-> Provides interservice communication within the cluster
+			-> NodePort
+			
+			-> LoadBalancer 
+			
+			-> External Name
+			
+	Ingress -  
+		-> We need to talk to our application with a secure protocol and domain name and for that ingress is used
+			so instead of service the request first goes to ingress then it does the forwarding to the service
+		-> Api object which provides routing rules to manage external users access to multiple services in a k8s cluster
+		-> In prod. , ingree exposes applications to the Internet via port 80(HTTP) ot port 443(HTTPS).
+	
+	ConfigMap(for non confidential data only) - its an external configuration to your application, it generally contains config data like the URL's of a DB
+		Or some other services which we use and in kubernetes we just connect it to the pod so that the pod actually gets the data which the configmap contains
+		
+		DB URL usually in the built image of the application
+		If any change is required in the service or service name we would usually do it in the properties file , 
+		then rebuild the application -> push it to the repo -> pull the new image in the pod -> restart the whole thing
+	
+	
+	Secret - just like configmap for storing username and passwords for sensitive info
+		these need to be encrypted using 3rd party external apps 
+		as kubernetes doesn't encrypt them by itself
+	
+	DaemonSet 
+		-> Is an bject that makes sure that nodes run a copy of a pod
+		-> as nodes are added to  cluster, pods are added to the nodes
+		-> Pods are garbage collectors when removed from a cluster
+		-> If you delete a daemon set all the pods are removed.
+		-> Ideally used for storage, logs and monitoring nodes.
+	
+	Deployment - 
+		Higher level object that provides updates for pods and replicasets
+			
+			Deployments:
+				Run Multiple replicas of an application
+				Suitable for stateless applications
+				Updayte triggers a rollout
+			
+
+	
+	StatefulSet
+		-> AN object which manages stateful applications
+		-> Manages deployment and scaling of pods 
+		-> Provides guarantee about the the ordering and uniqueness of pods
+		-> Maintains a sticky identity for each of your pods
+		
+	Job 
+		-> Is an object that creates pods and tracks its completion process
+		-> Jobs are retried until completed 
+		-> Deleting a job will remove the created pods
+		-> Suspending a job will delete its active pods until the job resumes 
+		-> A job can run several pods in parallel
+		-> a cronJob is regularly used to create jobs in an iterative schedule
+	
+	Volumes - it attaches a physical storage on a hdd to your pod and that storage could either be on a local machine
+		where the pod is located or on a cloud storage
+		
+		think of it as an ext. hard drive plugin on the kubernetes cluster
+		Kubernetes on itself doesn't manage any data persistence
+		
+		
+Kubectl - the kubernetes Command Line Interface
+
+	Kubectl - Kube command tool line
+	Helps users deploy applications, inspect and manage cluster resource,view logs etcd
+	provides many features for users who work with clusters and mange running cluster workloads
+	
+	Key command Types 
+		Imperative Commands
+		Imperative Object Configuration
+		Declarative Object Configuration
+		
+		
+Command Structure
+
+	kubectl [command] [type] [name] [flags]
+		[command] - any operation to be performed (create , get, apply, delete)
+		[type]- resource type (pod, deployment, replicaset)
+		[name]-resoure name( if applicable)
+		[flags] - special options or modifiers that override default value
+		
+		
+	Imperative Commands -
+		create , update , delete live objects directly
+		
+	-> Opertions specified as arguments or flags
+	-> Easiest to learn
+		
+		kubectl run nginx --image nginx
+		
+	-> no audit trail
+	-> Not very flexible ( no template, no integration)
+	
+	
+
+
+kubectl apply -f nginx
+
+
+	The command kubectl apply -f nginx is used in Kubernetes to apply a configuration file (nginx.yaml or similar) to the cluster. 
+	Here's a breakdown of what each part of the command does:
+	
+	kubectl: This is the command-line tool for interacting with Kubernetes clusters.
+	apply: This subcommand is used to create or update resources based on a configuration file.
+	-f: This option specifies the file or directory containing the configuration.
+	So, specifically:
+	
+	kubectl apply tells Kubernetes to create or update resources as defined in the configuration file.
+	-f nginx indicates that the configuration file (nginx.yaml or nginx.yml) is named nginx.
+	In summary, kubectl apply -f nginx applies the configuration described in the nginx.yaml file (or another file named nginx.yml or similar) 
+	to your Kubernetes cluster, creating or updating the specified resources (in this case, likely nginx-related resources) according to that configuration file.
+	
+	
+Control Plane in K8s
+
+	In Kubernetes, the control plane is a set of components that manage the cluster's overall state, orchestrate communication between components, and make global decisions about the cluster's behavior. It is responsible for maintaining the desired state of the cluster, reacting to events (like pod creation or deletion), and managing the various Kubernetes objects such as pods, services, deployments, etc.
+
+	Here are the main components of the Kubernetes control plane:
+	
+	kube-apiserver: This component exposes the Kubernetes API, which is used by all other Kubernetes components and by users via kubectl. It serves as the front-end for the Kubernetes control plane.
+	
+	etcd: This is a distributed key-value store used as Kubernetes' backing store for all cluster data. It stores configuration data, state data, and metadata about Kubernetes objects.
+	
+	kube-scheduler: This component watches for newly created pods with no assigned node and selects a node for them to run on. It considers factors such as individual and collective resource requirements, hardware/software/policy constraints, affinity and anti-affinity specifications, data locality, inter-workload interference, and deadlines.
+	
+	kube-controller-manager: This component runs controllers that are responsible for managing the state of the cluster. These controllers include the Node Controller, Replication Controller, Endpoints Controller, and Service Account & Token Controllers.
+	
+	cloud-controller-manager (optional): This is a Kubernetes-specific controller that interacts with the underlying cloud provider's API (such as AWS, GCP, Azure) to manage resources like load balancers and persistent storage volumes.
+	
+	These components work together to provide the cluster's orchestration and management capabilities. They continuously monitor the cluster's state and work to maintain the desired state defined by users through configuration files (like YAML manifests) or commands (kubectl apply, kubectl create, etc.).
+	
+	In summary, the control plane in Kubernetes is the central management entity that coordinates and controls all the actions within the cluster, ensuring that the specified workloads (pods, services, deployments) are running correctly and in accordance with the desired configuration.
+	
+
+
+Cheat Sheet
+
+	Cheat Sheet: Understanding Kubernetes Architecture
+		
+		Command								Description
+		for …do								Runs a for command multiple times as specified.
+		kubectl apply						Applies a configuration to a resource.
+		kubectl config get-clusters			Displays clusters defined in the kubeconfig.
+		kubectl config get-contexts			Displays the current context.
+		kubectl create						Creates a resource.
+		kubectl delete						Deletes resources.
+		kubectl describe					Shows details of a resource or group of resources.
+		kubectl expose						Exposes a resource to the internet as a Kubernetes service.
+		kubectl get							Displays resources.
+		kubectl get pods					Lists all the Pods.
+		kubectl get pods -o wide			Lists all the Pods with details.
+		kubectl get deployments				Lists the deployments created.
+		kubectl get services				Lists the services created.
+		kubectl proxy						Creates a proxy server between a localhost and the Kubernetes API server.
+		kubectl run							Creates and runs a particular image in a pod.
+		kubectl version						Prints the client and server version information.
+		
+		
+		
+	Glossary
+	
+	
+		Term								Definition
+		Automated bin packing				Increases resource utilization and cost savings using a mix of critical and best-effort workloads.
+		Batch execution						Manages batch and continuous integration workloads and automatically replaces failed containers, if configured.
+		Cloud Controller Manager			A Kubernetes control plane component that embeds cloud-specific control logic. The cloud controller manager lets you link your cluster into your cloud provider's API, and separates out the components that interact with that cloud platform from components that only interact with your cluster.
+		Cluster								A set of worker machines, called nodes, that run containerized applications. Every cluster has at least one worker node.
+		Container Orchestration				Container orchestration is a process that automates the container lifecycle of containerized applications.
+		Container Runtime					The container runtime is the software that is responsible for running containers.
+		Control Loop						A non-terminating loop that regulates the state of a system. A thermostat is an example of a control loop.
+		Control plane						The container orchestration layer that exposes the API and interfaces to define, deploy, and manage the lifecycle of containers.
+		Controller							In Kubernetes, controllers are control loops that watch the state of your cluster, then make or request changes where needed. Each controller tries to move the current cluster state closer to the desired state.
+		Data (Worker) Plane					The layer that provides capacity such as CPU, memory, network, and storage so that the containers can run and connect to a network.
+		DaemonSet							Ensures a copy of a Pod is running across a set of nodes in a cluster.
+		Declarative Management				A desired state that can be expressed (for example, the number of replicas of a specific application),and Kubernetes will actively work to ensure that the observed state matches the desired state.
+		Deployment							An object that provides updates for both Pods and ReplicaSets. Deployments run multiple replicas of an application by creating ReplicaSets and offering additional management capabilities on top of those ReplicaSets. In addition, deployments are suitable for stateless applications.
+		Designed for extensibility			Adds features to your cluster without adding or modifying source code.
+		Docker Swarm						automates the deployment of containerized applications but was designed specifically to work with Docker Engine and other Docker tools making it a popular choice for teams already working in Docker environments.
+		Ecosystem							A composition of services, support and tools that are widely available. The Kubernetes ecosystem is a large, rapidly growing ecosystem where its services, support, and tools are widely available.
+		etcd								A highly available key value store that contains all the cluster data. For any deployment, the deployment configuration is stored in etcd. It is the source of truth for the state in a Kubernetes cluster, and the system works to bring the cluster state into line with what is stored in etcd.
+		Eviction							Process of terminating one or more Pods on Nodes.
+		Imperative commands					Create, update, and delete live objects directly.
+		Imperative Management				Defining steps and actions to get to a desired state.
+		Ingress								An API object that manages external access to the services in a cluster, typically HTTP.
+		IPv4/IPv6 dual stack				Assigns both IPv4 and IPv6 addresses to Pods and Services.
+		Job									A finite or batch task that runs to completion.
+		Kubectl								Also known as kubectl Command line tool for communicating with a Kubernetes cluster's control plane, using the Kubernetes API.
+		Kubelet								The kubelet is the primary "node agent" that runs on each node. The kubelet takes a set of PodSpecs (a YAML or JSON object that describes a pod) provided primarily through the apiserver and ensures that the containers described in those PodSpecs are running and healthy. The kubelet doesn't manage containers which were not created by Kubernetes.
+		Kubernetes							is the de facto open-source platform standard for container orchestration. It was developed by Google and is maintained by the Cloud Native Computing Foundation (CNCF). Kubernetes automates container management tasks, like deployment, storage provisioning, load balancing and scaling, service discovery, and fixing failed containers. Its open-source toolset and wide array of functionalities are very attractive to leading cloud providers, who both support it, and in some cases, also offer fully managed Kubernetes services.
+		Kubernetes API						The application that serves Kubernetes functionality through a RESTful interface and stores the state of the cluster.
+		Kubernetes API Server				The Kubernetes API server validates and configures data for the api objects which include pods, services, replication controllers, and others. The API Server services REST operations and provides the frontend to the cluster's shared state through which all other components interact.
+		Kubernetes Controller Manager		Runs all the controller processes that monitor the cluster state and ensures that the actual state of a cluster matches the desired state. Examples of controllers that ship with Kubernetes are the replication controller, endpoints controller, namespace controller, and service accounts controller.
+		Kubernetes Cloud Controller Manager	A Kubernetes control plane component that embeds cloud-specific control logic. The cloud controller manager lets you link your cluster into your cloud provider's API, and separates out the components that interact with that cloud platform from components that only interact with your cluster.
+		Kubernetes Proxy					A network proxy that runs on each node in a cluster. This proxy maintains network rules that allow communication to Pods running on nodes—in other words, communication to workloads running on the cluster. The user must create a service with the apiserver API to configure the proxy.
+		kube-scheduler						Control plane component that watches for newly created Pods with no assigned node, and selects a node for them to run on.
+		Label Selector						Allows users to filter a list of resources based on labels.
+		Labels								Tags objects with identifying attributes that are meaningful and relevant to users.
+		Load balancing						Balances traffic across Pods for better performance and high availability.
+		Marathon							is an Apache Mesos framework. Apache Mesos is an open-source cluster manager developed by UC Berkeley. It lets users scale container infrastructure through the automaton of most management and monitoring tasks.
+		Namespace							An abstraction used by Kubernetes to support isolation of groups of resources within a single cluster.
+		Node								The worker machine in a Kubernetes cluster. User applications are run on nodes. Nodes can be virtual or physical machines. Each node is managed by the control plane and is able to run Pods.
+		Nomad								(Hashicorp) is a free and open-source cluster management and scheduling tool that supports Docker and other applications on all major operating systems across all infrastructure, whether on-premises or in the cloud. This flexibility lets teams work with any type and level of workload.
+		Object								An entity in the Kubernetes system. The Kubernetes API uses these entities to represent the state of your cluster.
+		Persistence							Ensures that an object exists in the system, until the object is modified or removed.
+		Preemption							Logic in Kubernetes helps a pending Pod to find a suitable Node by evicting low priority Pods existing on that Node.
+		Self-healing						Restarts, replaces, reschedules, and kills failing or unresponsive containers.
+		Service								An abstract way to expose an application running on a set of Pods as a network service.
+		Service Discovery					Discovers Pods using their IP addresses or a single DNS name.
+		StatefulSet							Manages the deployment and scaling of a set of Pods, and provides guarantees about the ordering and uniqueness of these Pods.
+		Storage								A data store that supports persistent and temporary storage for Pods.
+		Storage Orchestration				Automatically mounts your chosen storage system whether from local storage, network storage, or public cloud.
+		Pod									The smallest and simplest Kubernetes object. Represents a process running in a cluster; it also represents a single instance of an application running in a cluster. Usually, a Pod wraps a single container but, in some cases encapsulates multiple tightly coupled containers that share resources.
+		Proxy								In computing, a proxy is a server that acts as an intermediary for a remote service.
+		ReplicaSet							A ReplicaSet (aims to) maintain a set of replica Pods running at any given time.
+		Workload							A workload is an application running on Kubernetes.
+
+
