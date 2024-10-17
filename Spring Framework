@@ -1,0 +1,542 @@
+Maven 
+
+-> project build tool
+-> we need to add dependencies
+-> we use it as software configuration management tool to download the dependencies and plugins
+-> ur applications api is dependent on which 3rd party api - basically this is what a dependency means
+-> Life cycle
+-> Maven can manage a project's build, reporting and documentation from a central piece of information - xml file
+
+
+mvn -version
+
+mvn archetype:generate -DgroupId=com.netcracker -DartifactId=greeting -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=true
+
+It seems like you're using Maven to generate a new project with the `maven-archetype-quickstart` archetype. This command will create a basic 
+Maven project structure for you with some default configurations. Here's a breakdown of what each parameter means:
+
+- `-DgroupId`: This is the Group ID of your project. 
+		It's typically used to identify your project uniquely across all projects. 
+		For example, it might be something like `com.example` or in your case `com.netcracker`.
+- `-DartifactId`: This is the Artifact ID of your project. 
+		It's typically the name of the project. For example, `greeting`.
+- `-DarchetypeArtifactId`: This specifies which archetype to use for generating the project. 
+		In this case, it's `maven-archetype-quickstart`, 
+		which is a simple Maven project archetype for Java projects.
+- `-DinteractiveMode=true`: This flag tells Maven to run in interactive mode, 
+		meaning it will prompt you for any additional information that it needs.
+
+So, when you run this command, Maven will prompt you for any additional information it needs (since you've specified `interactiveMode=true`), 
+and then it will generate a new Maven project with the specified Group ID, Artifact ID, and archetype.
+
+
+pom.xml - project object model
+
+	ordering of the elements inside the pom.xml is given on the basis of xsd file which it has taken as a reference
+	The grammar of the xml file is defined there
+	
+
+	EXAMPLE - 
+	
+		<project xmlns="https://maven.apache.org/POM/4.0.0" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+		<modelVersion>4.0.0</modelVersion>
+		<groupId>com.spring</groupId>
+		<artifactId>spring-lifecycle</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<name>spring example</name>
+		<dependencies>
+			<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
+				<dependency>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+					<version>6.1.8</version>
+				</dependency>
+				<dependency>
+					<groupId>com.nc</groupId>
+					<artifactId>BankAppWithoutSpring</artifactId>
+					<version>0.0.1-SNAPSHOT</version>
+				</dependency>
+		</dependencies>
+		</project>
+		
+	In the context of a Maven pom.xml file, setting a dependency means specifying external libraries or modules that your project relies on. 
+	Dependencies are external code or libraries that your project needs in order to compile, run, or perform certain tasks.
+
+	When you declare a dependency in your pom.xml, Maven automatically downloads the required libraries from a central repository (like Maven Central) and includes them in your project's build path. 
+	This process ensures that your project has access to the necessary functionality provided by those libraries.
+
+	In the example you provided, you have declared dependencies on two libraries:
+	
+	org.springframework:spring-context: This is the Spring Framework's core context module, which provides essential functionality for configuring and managing Spring beans and their lifecycles.
+	
+	com.nc:BankAppWithoutSpring: This appears to be another project/module developed by your organization (com.nc). By including this dependency, your project can use the functionality provided by the BankAppWithoutSpring module.
+	
+	By declaring these dependencies in your pom.xml file, you ensure that your project has access to the classes and resources provided by these libraries, allowing you to leverage their functionality in your own code.
+
+
+Bean
+
+it is a class that has support for 
+	-> introspection
+	-> customisation
+	-> events 
+	-> properties
+	-> persistence
+bean can be a POJO class , a service class , anything unless it is managed by the spring IOC container 
+
+** NOte - Bean must be a public class and should have a default constructor without parameters
+
+Bean Life Cycle 
+	1. Creation
+		Spring Config
+			-XML
+			-Annotation
+			-JavaConfig
+	2. Injection
+		Setter
+		Constructor
+	3. Initialization
+		init-method
+	4. Finalization
+		- destroy-method
+	5. Closing Context 
+		-Event Listeners
+		
+Indirect Dependency	
+	- depends-on
+	- primary
+Bean Scopes	
+		- Singleton
+		- prototype
+	Web Only
+		- request 
+		- session
+		- global
+Special bean Wiring
+	- lookup Method
+	- scoped Proxy
+Factory Customization
+	- factory-method = "xyz"
+	- factory-bean = "MyClass" factory-method = "xyz'
+	- parent = "beanName"
+	- abstract = true
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Spring Framework
+
+Bean is a POJO class
+When we refer a POJO class from a Spring perspective
+
+Why Spring?
+To adress the drawbacks of JAVA EE
+
+JAVA EE 
+
+SPRING - Lightwieght
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Coupling
+
+Tight
+	More Interdependency
+	More Coordination
+	More information Flow
+
+Loose
+	Less Interdependency
+	Less Coordination
+	Less Information Flow
+	
+	
+SOLID Principles - Used to create better classes
+
+	- Dependency Inversion
+		high level modules should not depend on the low level modules
+		Both should depend on abstraction
+		
+	Access to the lower level classes should only be done using interfaces
+	
+Dependency Injection - Design Pattern
+	
+
+	
+BEAN - class which is managed by a spring IOC container is called a bean
+it must be a public class and should have default constructor without parameters
+
+
+Tight Coupling - Everytime we introduce an entity,w e need ti change our code
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Example for dependency Inversion
+
+package com.nc.model;
+public class SavingsAccount implements Account{
+	public String createAccount() {
+		return "Savings Account created Successfully";	
+	}
+}
+
+
+package com.nc.model;
+
+public class CurrentAccount implements Account{
+	public String createAccount() {
+		return "Current Account created Successfully";	
+	}
+}
+
+package com.nc.model;
+
+public interface Account {
+	public String createAccount();
+}
+
+
+package com.nc.client;
+
+import com.nc.model.Account;
+
+import com.nc.model.CurrentAccount;
+import com.nc.model.SavingsAccount;
+
+public class BankApp{
+	public static void main(String[] args) {
+		//CurrentAccount account = new CurrentAccount();
+		//SavingsAccount account = new SavingsAccount();
+		
+		Account account = new SavingsAccount();
+		System.out.println(account.createAccount());
+	}
+}
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Dependency Injection - We let the IOC container handle the beans (POJO basically)
+						So actual name and all when we call the class functions is hidden from the user
+
+Example program
+
+pom
+
+<project xmlns="https://maven.apache.org/POM/4.0.0" xmlns:xsi="httpa://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="httpa://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.nc</groupId>
+  <artifactId>BankAppWithoutSpring</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>Bank App Without Spring Support</name>
+  <dependencies>
+	<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-context</artifactId>
+		    <version>6.1.8</version>
+		</dependency>
+  </dependencies>
+</project>
+
+package com.nc.model;
+public class SavingsAccount implements Account{
+	public String createAccount() {
+		return "Savings Account created Successfully";	
+	}
+}
+
+
+package com.nc.client;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.nc.model.Account;
+
+import com.nc.model.CurrentAccount;
+import com.nc.model.SavingsAccount;
+
+public class BankApp{
+	public static void main(String[] args) {
+		//CurrentAccount account = new CurrentAccount();
+		//SavingsAccount account = new SavingsAccount();
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("appContext.xml");
+		Account account = context.getBean("current",Account.class);
+		System.out.println(account.createAccount());
+	}
+}
+
+
+package com.nc.model;
+
+public class CurrentAccount implements Account{
+	public String createAccount() {
+		return "Current Account created Successfully";	
+	}
+}
+
+
+package com.nc.model;
+
+public interface Account {
+	public String createAccount();
+}
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- bean definitions here -->
+    
+    <bean id="savings" class="com.nc.model.SavingsAccount"/>
+    <bean id="current" class="com.nc.model.CurrentAccount"/>
+    
+</beans>
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Life Cycle of Beans:
+
+Creation
+
+Setting Properties
+
+Initialization
+
+Finalization
+
+Destroying
+
+
+Bean need to be configured under an ioc container
+
+Ways to do this -
+
+	XML Config
+	
+	Annotation Driven Config
+		@Component - When this annotation used behind a class it becomes a bean
+		he @Component annotation is one of the core annotations in the Spring Framework used for declaring a Spring-managed component or bean. 
+		It is a generic stereotype annotation that indicates a class is a Spring component. Spring components are typically Java classes that are 
+		managed by the Spring IoC (Inversion of Control) container, meaning that their lifecycle and dependencies are managed by Spring.
+			@Service
+			@Repository
+			@Controller(In Sping MVC)
+			
+	Class Driven Config - Pure Java Class
+	
+Service is a child annotation inherited from component - only difference is the readability
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+There are 2 types of factories associated with a bean container
+
+Bean Factory - Lazy Loading factory
+Application Context
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Injection of properties inside the bean class
+
+
+Setter Injection
+
+Constructor Injection - we are injecting a property using a constructor
+
+Manual Wiring - Specifically injecting a bean into the bean class
+Autowiring
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+@PostConstrruct 
+	Whenever we mark a bean with @PostConstruct annotation, this method will be called after the bean is created, after the properties are set
+
+If the attribute ' init-method = "init" ' is moved inside bean declaration, it will run for all the beans made under it since it is the parent tab of all the beans
+
+don't use afterpropertiesSet annotation
+
+Destroy method -  destroy-method = "shutdown"  - cleanup of tasks
+
+
+@PreDestroy
+	In a Spring context, when a bean annotated with @PreDestroy is being removed from the container, Spring calls the method annotated with @PreDestroy just before 
+	destroying the bean. This allows you to perform any necessary cleanup or releasing of resources associated with that bean.
+
+
+Bean Ordering - Depends-On
+
+Indirect Dependency between beans is a dependency that is not introduced through properties or constructor arguments, 
+but rather depends on the side effects of another bean's initialization
+
+ beanA ------> beanB
+ 
+ 
+Bean Scopes - 
+	singleton - default - only one instance will be created in the application and that instance will be used throughout the application 
+	
+	same hashcode beans
+	
+	prototype - each request of prototype will result in a new instance
+	
+   web only
+   
+	request
+	session
+	global
+	
+	
+	When you are injecting a prototype bean inside a singleton bean lookup-method chaining should be done
+		No annotations are there for lookup method
+	
+	Session Scoped bean into singleton - 
+	
+	
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Factory Beans
+
+	Customization of spring factory
+	
+	We need to declare the return value of a sttic method as a bean
+	
+	factory method is a method which is defining the scope of a particular bean , defining the creation of a bean
+	
+	factory-customisation
+		-factory-method = 'xyz'
+		-factory-ben = "MyClassL factory-method - "xyz"
+		-parent = "beanName"
+		-abstract = true
+		
+	Bean Definitions can be inherited just like the classes in OOP
+	
+	Beans can be defined as abstract - beans defined as abstract can not be instantiated during context startup
+	
+	
+Bean Aliasing
+	Same bean refereed to with different names in different subsystems
+	
+Application Context Life Cycle
+		In Spring Framework, the ApplicationContext is the central interface within the Spring container 
+		for providing configuration information to the application. 
+		It is responsible for instantiating, configuring, and assembling beans (components) in the application.
+
+Here's how ApplicationContext relates to beans:
+
+	Bean Instantiation: ApplicationContext is responsible for instantiating beans defined in the Spring configuration files 
+	(or Java configurations). It manages the complete lifecycle of beans from instantiation to destruction.
+
+	Dependency Injection: It facilitates dependency injection, where beans defined in the context can be injected into 
+	other beans either through constructor injection or setter injection.
+
+	Configuration Management: ApplicationContext provides a convenient mechanism to manage configuration details 
+	such as database URLs, service endpoints, etc., externalizing them from the application code.
+
+	Bean Scope Management: ApplicationContext supports different bean scopes like singleton, prototype, request, 
+	session, etc., allowing fine-grained control over how beans are instantiated and used.
+
+	Event Propagation: It allows for event propagation within the Spring application, enabling beans to interact based 
+	on events such as context startup/shutdown, etc.
+
+	Integration with AOP: ApplicationContext integrates seamlessly with Spring's AOP (Aspect-Oriented Programming) framework, 
+	allowing for cross-cutting concerns like logging, transaction management, security, etc., to be applied declaratively.
+
+	Overall, ApplicationContext serves as the heart of the Spring Framework's dependency injection system and provides essential 
+	features for developing enterprise-scale Java applications with loose coupling and high modularity.
+	
+	
+	Event handling in the application :-
+	
+		Event handling in the context of a software application refers to the mechanism by which the 
+		application responds to events generated by users, other systems, or the environment. 
+		Events can include user interactions (like button clicks or keystrokes), 
+		system notifications (like receiving a message or a file), or changes in state (like a data update or a system startup/shutdown).
+
+		In the context of Spring Framework or similar environments, event handling typically involves the following components:
+
+			Event: An event represents an occurrence or notification within the application. 
+			It can be a predefined event type (like application startup/shutdown) or a custom event defined by the application developer.
+			
+			Event Publisher: This component is responsible for publishing or broadcasting events within the application context. 
+			In Spring, beans or components can act as event publishers by extending ApplicationEventPublisher 
+			interface or using the ApplicationEventPublisherAware interface.
+			
+			Event Listener: Event listeners are components that subscribe to specific types of events and define actions to be taken 
+			when those events occur. In Spring, event listeners implement the ApplicationListener interface and 
+			define the onApplicationEvent() method to handle the event.
+			
+			Event Handling Mechanism: The framework (such as Spring) provides mechanisms to register listeners, publish events, 
+			and manage the flow of events within the application context. Events can be synchronous or asynchronous depending on 
+			the requirements and configuration.
+			
+			
+		Custom Events - 
+			ApplicationEvent
+			ApplicationEventPublisherAware,ApplicationEventPublisher
+			ApplicationListener
+			
+			
+		Aware Interfaces - 
+		
+		
+		
+AOP - AOP stands for Aspect-Oriented Programming. 
+It is a programming paradigm and a methodology that complements traditional object-oriented programming (OOP) 
+by providing a way to modularize cross-cutting concerns. 
+Cross-cutting concerns are aspects of a program that affect multiple modules or components, but are not localized to a specific module or component.
+
+
+	Aspect
+	
+	Advice
+		Before
+		After 
+		Around
+		AfterThrow
+		AfterReturn
+		
+		
+Spring DAO Support
+
+	Choosing an approach for JDBC database access
+		-> JDBC Template
+		-> NamedParameterJdbcTemplate
+		-> SimpleJdbcTemplate
+		-> SimpleJdbcInsert and SimpleJdbcCall
+		
+	Spring Framework's Jdbc abstraction framework consists of 4 different packages
+		-> org.springframework.jdbc.core
+		-> org.springframework.jdbc.datasource
+		-> org.springframework.jdbc.object
+		-> org.springframework.jdbc.support
+		
+		
+	Datasource
+		Spring obtains a connection to the database through a Datasource
+		A DataSource is part of the JDBC spec and is a generalized connection factoy
+		It allows a connection or a framework to hode connection pooling and transaction management issues from the application code
+	DriverManagerDataSource
+		this class is an implementation of the standard Datasource interface that configures a plain JDBC driver through bean properties,
+		and returns a new connection every time
+		
+	DriverManagerDataSource class should only be used for testing purposes, since it does not provide pooling and will perform poorly when 
+	multiple requests for a connection are made.
+	
+	Implementations in the spring distribution are meant only for testing purposes and do not provide pooling
+	hence, we can use third party implementations with a connection pool
+	
+	Hence, we can use third party implementations with a connection pool
+	
+	Popular implementations are apache jakarta Commons DBCP and C3P0
+	
+	
