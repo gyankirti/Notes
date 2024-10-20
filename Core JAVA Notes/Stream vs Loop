@@ -1,0 +1,148 @@
+Task 1: Basic Iteration Over a List
+We have a list of integers and we want to print each number.
+
+Using a Loop:
+java
+
+List<Integer> numbers = List.of(1, 2, 3, 4, 5);
+
+for (Integer number : numbers) {
+    System.out.println(number);
+}
+What happens?: The for loop explicitly goes through each element (number) in the list and prints it.
+
+Using a Stream:
+java
+
+List<Integer> numbers = List.of(1, 2, 3, 4, 5);
+
+numbers.stream().forEach(number -> System.out.println(number));
+
+What happens?: The stream() method converts the list into a stream, and forEach() is used to apply the System.out.println() function to each element.
+Key difference: In a loop, you explicitly define how each element is accessed. With streams, you describe what should be done, and the Stream API handles the iteration.
+
+Task 2: Filtering Data
+We want to print only the even numbers from a list.
+
+Using a Loop:
+java
+
+List<Integer> numbers = List.of(1, 2, 3, 4, 5);
+for (Integer number : numbers) {
+    if (number % 2 == 0) {  // Check if the number is even
+        System.out.println(number);
+    }
+}
+What happens?: The loop goes through each number, checks if it’s even, and only prints the even ones.
+
+Using a Stream:
+java
+
+List<Integer> numbers = List.of(1, 2, 3, 4, 5);
+
+numbers.stream()
+       .filter(number -> number % 2 == 0)  // Only keep even numbers
+       .forEach(System.out::println);      // Print each remaining number
+What happens?: The filter() method applies a condition (number % 2 == 0) and only keeps elements that match the condition. Then, forEach() prints the filtered results.
+Key difference: In the loop, you explicitly check and decide what to do with each element. In streams, you just declare a filtering operation, and the stream does the work.
+
+Task 3: Transforming Data (Mapping)
+We want to double each number in the list and collect the result into a new list.
+
+Using a Loop:
+java
+
+List<Integer> numbers = List.of(1, 2, 3, 4, 5);
+List<Integer> doubledNumbers = new ArrayList<>();
+
+for (Integer number : numbers) {
+    doubledNumbers.add(number * 2);  // Multiply each number by 2
+}
+
+System.out.println(doubledNumbers);
+
+What happens?: The loop multiplies each number by 2 and adds it to a new list called doubledNumbers.
+
+Using a Stream:
+java
+
+List<Integer> numbers = List.of(1, 2, 3, 4, 5);
+
+List<Integer> doubledNumbers = numbers.stream()
+                                      .map(number -> number * 2)  // Multiply each number by 2
+                                      .toList();                  // Collect results into a list
+
+System.out.println(doubledNumbers);
+
+What happens?: The map() method transforms each element by multiplying it by 2, and toList() collects the results into a new list.
+Key difference: With a loop, you explicitly add each transformed element to a new list. With streams, you describe the transformation (map()) and the collection process (toList()), and the stream handles the rest.
+
+Task 4: Combining Operations (Filter + Map)
+Let’s say we want to double only the even numbers from a list and collect the results into a new list.
+
+Using a Loop:
+java
+
+List<Integer> numbers = List.of(1, 2, 3, 4, 5);
+List<Integer> result = new ArrayList<>();
+
+for (Integer number : numbers) {
+    if (number % 2 == 0) {  // Filter even numbers
+        result.add(number * 2);  // Multiply even numbers by 2
+    }
+}
+
+System.out.println(result);
+What happens?: The loop filters out even numbers and then adds the doubled values to the new list.
+
+Using a Stream:
+java
+
+List<Integer> numbers = List.of(1, 2, 3, 4, 5);
+
+List<Integer> result = numbers.stream()
+                              .filter(number -> number % 2 == 0)  // Filter even numbers
+                              .map(number -> number * 2)          // Multiply filtered numbers by 2
+                              .toList();                          // Collect results into a list
+
+System.out.println(result);
+What happens?: The filter() method filters the even numbers, the map() method doubles them, and toList() collects the final results into a new list.
+Key difference: In the loop, you have to handle each step manually (filtering and adding). With streams, you chain operations in a more declarative and readable way.
+
+Task 5: Parallel Processing
+Let’s say we want to print each number, but we want to do it in parallel.
+
+Using a Loop:
+java
+Copy code
+List<Integer> numbers = List.of(1, 2, 3, 4, 5);
+
+for (Integer number : numbers) {
+    new Thread(() -> System.out.println(number)).start();  // Manually create threads
+}
+What happens?: Here you need to manually create and start threads to print each number in parallel.
+
+Using a Stream:
+java
+
+List<Integer> numbers = List.of(1, 2, 3, 4, 5);
+
+numbers.parallelStream()  // Parallel processing
+       .forEach(System.out::println);
+What happens?: The parallelStream() method allows the stream to process the elements in parallel without you having to manually create threads.
+Key difference: With streams, you can easily parallelize operations with parallelStream(). With loops, you have to manually manage threads and concurrency.
+
+Summary of Differences:
+Feature							Loop													Stream
+Iteration Control				You manually control how each element is accessed.		Stream API handles iteration automatically.
+Declarative vs. Imperative		Imperative (you define how to do it).					Declarative (you define what to do).
+Transformation					You manually update and store transformed elements.		Use map() and other operations to transform easily.
+Filtering						You manually apply conditions using if statements.		Use filter() to declaratively specify conditions.
+Parallelism						You manually manage threads.							Use parallelStream() for parallel processing.
+Conciseness						Typically requires more lines of code.					Typically more concise and readable.
+
+When to Use:
+Loops: When you need explicit control or are modifying the original data.
+Streams: When you want concise, declarative code, especially when filtering, transforming, or processing large datasets that could benefit from parallelization.
+
+In simple tasks, streams often make the code cleaner and more concise. However, loops still have their place when you need fine-grained control over iteration and processing.
