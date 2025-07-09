@@ -21,3 +21,203 @@ Design a low-level system for a parking lot that satisfies the following require
 	Please provide a detailed low-level design for the parking lot system that can handle the above requirements. 
 	You should consider how the parking lot will handle incoming and outgoing vehicles, track parking spots, generate and process parking tickets, 
 	and manage payments. Additionally, you should consider how the system will communicate with the display board and handle different parking strategies. 	
+
+
+
+
+
+import java.time.*;
+import java.util.*;
+
+// === ENUMS ===
+enum VehicleType { BIKE, CAR, TRUCK }
+enum SpotType { MINI, COMPACT, LARGE }
+enum PaymentMode { CASH, CARD, UPI }
+
+// === VEHICLE ===
+abstract class Vehicle {
+    private String number;
+    private VehicleType type;
+    public Vehicle(String number, VehicleType type) {
+        this.number = number;
+        this.type = type;
+    }
+    public String getNumber() { return number; }
+    public VehicleType getType() { return type; }
+}
+class Car extends Vehicle {
+    public Car(String number) { super(number, VehicleType.CAR); }
+}
+class Bike extends Vehicle {
+    public Bike(String number) { super(number, VehicleType.BIKE); }
+}
+
+// === PARKING SPOT ===
+abstract class ParkingSpot {
+    private String spotId;
+    private boolean isFree;
+    private SpotType spotType;
+    public ParkingSpot(String spotId, SpotType type) {
+        this.spotId = spotId;
+        this.spotType = type;
+        this.isFree = true;
+    }
+    public boolean isFree() { return isFree; }
+    public void occupy() { isFree = false; }
+    public void free() { isFree = true; }
+    public SpotType getType() { return spotType; }
+    public String getSpotId() { return spotId; }
+    public abstract boolean canFitVehicle(Vehicle vehicle);
+}
+class CompactSpot extends ParkingSpot {
+    public CompactSpot(String spotId) { super(spotId, SpotType.COMPACT); }
+    public boolean canFitVehicle(Vehicle v) {
+        return v.getType() == VehicleType.CAR;
+    }
+}
+
+// === TICKET ===
+class Ticket {
+    private String ticketId;
+    private Vehicle vehicle;
+    private ParkingSpot spot;
+    private LocalDateTime entryTime;
+    public Ticket(String ticketId, Vehicle vehicle, ParkingSpot spot) {
+        this.ticketId = ticketId;
+        this.vehicle = vehicle;
+        this.spot = spot;
+        this.entryTime = LocalDateTime.now();
+    }
+    public String getTicketId() { return ticketId; }
+    public Vehicle getVehicle() { return vehicle; }
+    public ParkingSpot getSpot() { return spot; }
+    public LocalDateTime getEntryTime() { return entryTime; }
+}
+
+// === STRATEGY: SPOT ALLOCATION ===
+interface SpotAllocationStrategy {
+    ParkingSpot findSpot(Vehicle vehicle, List<ParkingSpot> spots);
+}
+class NearestSpotStrategy implements SpotAllocationStrategy {
+    public ParkingSpot findSpot(Vehicle vehicle, List<ParkingSpot> spots) {
+        for (ParkingSpot spot : spots) {
+            if (spot.isFree() && spot.canFitVehicle(vehicle)) {
+                return spot;
+            }
+        }
+        return null;
+    }
+}
+
+// === STRATEGY: PAYMENT ===
+interface PaymentStrategy {
+    boolean pay(double amount);
+}
+class CashPayment implements PaymentStrategy {
+    public boolean pay(double amount) {
+        System.out.println("Paid ₹" + amount + " in cash.");
+        return true;
+    }
+}
+class CardPayment implements PaymentStrategy {
+    public boolean pay(double amount) {
+        System.out.println("Paid ₹" + amount + " by card.");
+        return true;
+    }
+}
+
+// === SERVICES ===
+class TicketService {
+    public Ticket generateTicket(Vehicle vehicle, ParkingSpot spot) {
+        return new Ticket(UUID.randomUUID().toString(), vehicle, spot);
+    }
+    public double calculateFee(Ticket ticket) {
+        long hours = Duration.between(ticket.getEntryTime(), LocalDateTime.now()).toHours();
+        return Math.max(20, hours * 10);  // ₹20 base, ₹10/hr
+    }
+}
+class PaymentService {
+    public boolean processPayment(PaymentStrategy strategy, double amount) {
+        return strategy.pay(amount);
+    }
+}
+
+// === PARKING FLOOR + LOT ===
+class ParkingFloor {
+    private int floorNumber;
+    private List<ParkingSpot> spots;
+    public ParkingFloor(int floorNumber) {
+        this.floorNumber = floorNumber;
+        this.spots = new ArrayList<>();
+    }
+    public void addSpot(ParkingSpot spot) {
+        spots.add(spot);
+    }
+    public List<ParkingSpot> getSpots() {
+        return spots;
+    }
+}
+class ParkingLot {
+    private List<ParkingFloor> floors;
+    private SpotAllocationStrategy spotStrategy;
+    private TicketService ticketService;
+    private PaymentService paymentService;
+
+    public ParkingLot(SpotAllocationStrategy strategy) {
+        this.floors = new ArrayList<>();
+        this.spotStrategy = strategy;
+        this.ticketService = new TicketService();
+        this.paymentService = new PaymentService();
+    }
+
+    public void addFloor(ParkingFloor floor) {
+        floors.add(floor);
+    }
+
+    public Ticket vehicleEntry(Vehicle vehicle) {
+        for (ParkingFloor floor : floors) {
+            ParkingSpot spot = spotStrategy.findSpot(vehicle, floor.getSpots());
+            if (spot != null) {
+                spot.occupy();
+                Ticket ticket = ticketService.generateTicket(vehicle, spot);
+                System.out.println("✅ Ticket Issued: " + ticket.getTicketId() + " Spot: " + spot.getSpotId());
+                return ticket;
+            }
+        }
+        System.out.println("❌ No available spots for vehicle.");
+        return null;
+    }
+
+    public void vehicleExit(Ticket ticket, PaymentStrategy paymentMethod) {
+        double fee = ticketService.calculateFee(ticket);
+        boolean success = paymentService.processPayment(paymentMethod, fee);
+        if (success) {
+            ticket.getSpot().free();
+            System.out.println("✅ Spot Freed: " + ticket.getSpot().getSpotId());
+        }
+    }
+}
+
+// === MAIN TEST CASE ===
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        // Create parking lot with strategy
+        ParkingLot lot = new ParkingLot(new NearestSpotStrategy());
+
+        // Add one floor with 2 compact spots
+        ParkingFloor floor1 = new ParkingFloor(1);
+        floor1.addSpot(new CompactSpot("C1"));
+        floor1.addSpot(new CompactSpot("C2"));
+        lot.addFloor(floor1);
+
+        // Entry for a car
+        Vehicle car1 = new Car("MH12AB1234");
+        Ticket ticket = lot.vehicleEntry(car1);
+
+        // Wait a bit (simulating parking time)
+        Thread.sleep(1000);
+
+        // Exit and pay
+        lot.vehicleExit(ticket, new CashPayment());
+    }
+}
